@@ -1,0 +1,11 @@
+---
+title: "一种新的Agent Harness设想：Agent应该在你拉屎的时候会递纸"
+date: "2026-06-20T08:09:52+00:00"
+tag: "AI 与 Agent"
+category: "ai-agents"
+lang: "zh-CN"
+description: "我试图定义一种以人为中心的Agent Harness。目前的Agent Harness如Codex，Claude Code等突出的是Agent无干预长时间运行的能力。它们的设计哲学是它们能够接管人类的工作，在无…"
+source: "https://barytes.substack.com/p/agent-harnessagent"
+---
+
+<p>我试图定义一种以人为中心的Agent Harness。目前的Agent Harness如Codex，Claude Code等突出的是Agent无干预长时间运行的能力。它们的设计哲学是它们能够接管人类的工作，在无人类干预的情况下端到端地给出结果。包括近期火爆的loop工程，以及自进化Agent，其指向的目标都是Agent在工作中需要越来越少的人类干预，最终自动运行。这种把人类从工作流程中去掉的Agent设计哲学对于人类不愿意做的事情非常有用，然而对于人类真正关心的事情，实际上是剥夺了人类对自己意义的掌控和参与。我认为需要一种与人更好协作的新的Agent范式，它非常人类中心，不替代人类做他必要的劳动，而是提供必要的、甚至人类自己也没意识到的辅助，让人类在帮助中成长为更好的自己。<br/>我用一个有点粗俗的比喻：<strong>拉屎递纸。</strong>目前的Agent harness是，人类想拉屎，然后Agent把屎拉出来了，要求人类批准这坨屎是人类的屎。人类中心的Agent harness是，人类想拉屎，Agent做好马桶、纸巾，递上手机，让人畅快拉屎。不需要人审批，不需要人同意。<br/>很多所谓 human-in-the-loop 其实只是：agent 把人的工作做了，然后把人降级成审批按钮。这仍然是在剥夺人的主体动作。人看似在 loop 里，实际上已经不在 work 里。这是一种对token的浪费。对于人类关注的任务，任何AI generated但无法触动人类，无法让人类认同的内容都是在浪费token。例如，我可以让AI生成这种Agent harness的核心功能，但是于我没有任何触动，于后续的设计思考没有任何帮助。我可以说这部分token就是完全被浪费了的。人类中心 harness 更像：</p><blockquote><p><strong>agent 不替人完成主体动作，而是布置让人能更顺畅完成主体动作的环境。</strong></p></blockquote><p>这里真正的区别是：当前 agent harness替人执行主体任务，然后请求人类批准审批 / 驳回。human-centered harness准备环境、材料、工具、节奏、恢复状态，人类亲自完成有意义的主体动作。</p><p>这也说明“人类中心”不是“多问人几次”“多让人批准几次”。那只是把剥夺变得礼貌一点。真正的人类中心是：<strong>人不需要批准自己正在做的事，因为事情本来就是人在做。</strong></p><p>举一个我目前正在做的Founder Agent的例子。错误形态是：</p><blockquote><p>founder 想判断一个 idea 值不值得做，agent 直接分析完，给出结论，让 founder approve。</p></blockquote><p>正确形态是：</p><blockquote><p>founder 想判断一个 idea，agent 把访谈材料整理好，把过去的旧思考链路展示出来，让founder可以顺畅地标出矛盾标，整理产品假设，分析下一步动作，自己进入判断。</p></blockquote><p>所谓让证据更清楚，假设更暴露等功能本身不重要，重要的是它们是否服务于这个原则：</p><blockquote><p><strong>主体动作不可替代：不要替代主体动作，只消除主体动作周围的摩擦。</strong></p></blockquote><p>它对 harness 设计的影响很大：</p><ul><li><p>最好的 AI 输出有时是不输出，而是把材料摆好。</p></li><li><p>最好的自动化有时不是完成任务，而是让人更容易进入状态。</p></li><li><p>最差的 token 浪费，是 AI 抢先生成一堆“正确但无触动”的内容。</p></li><li><p>评测不该只看 agent 有没有完成任务，而要看人有没有更顺畅地完成自己的任务。</p></li><li><p>approval 不是主体性的证据，参与才是。</p></li></ul><p>所以重新定义这个 harness：</p><blockquote><p>Human-centered Agent Harness 是一种环境支架型 agent harness。它不以端到端替人完成任务为目标，而以维护人的主体动作、降低其周边摩擦、增强其判断与参与为目标。</p></blockquote><p>这句话比“judgment-preserving”还更准确一点。它不只是保护判断，而是保护人的主体动作。判断只是其中一种。写作、研究、创业、学习、创作、谈话、决定人生方向，都可能是这种主体动作。</p>

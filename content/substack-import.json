@@ -1,0 +1,48 @@
+{
+  "source": "https://barytes.substack.com/feed",
+  "archiveCount": 6,
+  "imported": [
+    {
+      "slug": "agent-harnessagent",
+      "title": "一种新的Agent Harness设想：Agent应该在你拉屎的时候会递纸",
+      "source": "https://barytes.substack.com/p/agent-harnessagent",
+      "characters": 1593,
+      "images": 0
+    },
+    {
+      "slug": "thoughts-on-the-long-term-game",
+      "title": "对长期游戏的一些思考 Thoughts On the Long-Term Game",
+      "source": "https://barytes.substack.com/p/thoughts-on-the-long-term-game",
+      "characters": 7965,
+      "images": 0
+    },
+    {
+      "slug": "aiaiaccountability",
+      "title": "AI的大鞭子终于抽回我身上：AI时代更应该拥有工作的Accountability",
+      "source": "https://barytes.substack.com/p/aiaiaccountability",
+      "characters": 3514,
+      "images": 0
+    },
+    {
+      "slug": "auto-research",
+      "title": "Auto-Research 时代，读博可能不是个好选择",
+      "source": "https://barytes.substack.com/p/auto-research",
+      "characters": 6164,
+      "images": 0
+    },
+    {
+      "slug": "vibe-codedllm-wiki",
+      "title": "一个星期Vibe Coded了一个llm-wiki的入口应用",
+      "source": "https://barytes.substack.com/p/vibe-codedllm-wiki",
+      "characters": 1620,
+      "images": 1
+    },
+    {
+      "slug": "andrej-karpathyllm-wikicontext-infrastructure",
+      "title": "从Andrej Karpathy的LLM Wiki和鸭哥的context infrastructure看信息复利系统的设计",
+      "source": "https://barytes.substack.com/p/andrej-karpathyllm-wikicontext-infrastructure",
+      "characters": 6032,
+      "images": 1
+    }
+  ]
+}
