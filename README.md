@@ -35,6 +35,7 @@ npm run preview
 - `src/style.css`：所有页面的视觉样式与移动端适配。
 - `content/blog/*.md`：博客文章，文件名生成文章 URL。
 - `content/publications/*.md`：论文详情，文件名生成论文 URL。
+- `public/blog/`：博客图片。封面文件名必须与文章 slug 一致，例如 `content/blog/auto-research.md` 对应 `public/blog/auto-research.png`；构建时自动出现在列表卡片和文章页。文内配图也放在此目录，正文用 `/blog/filename` 引用。
 - `public/papers/`：论文 PDF。
 
 新增博客：
@@ -53,6 +54,8 @@ description: A short summary for the list page.
 
 Write your article in Markdown.
 ```
+
+封面放到 `public/blog/{slug}.png`，文件名与 Markdown 的 slug 一致。文内配图也放进 `public/blog/`，用 `/blog/filename` 引用。
 
 新增论文：
 
@@ -81,7 +84,7 @@ A description of the work.
 
 个人资料、教育经历、作者顺序与论文状态整理自用户指定的「12 week year／全局内容／个人资产／USER.md」及 PhD CV，采用 CV 中的 M.Eng.（2023–2026）而非旧站的 MPhil student 表述。论文 PDF 来自同目录的三份论文文件。未复制私人规划、成绩单、电话或其他个人材料。
 
-博客已从 https://barytes.substack.com 搬运目前归档的全部 6 篇公开文章，保留原文、原始发布日期和来源链接，2 张配图保存在本地 `public/blog/`。仅去掉 Substack 订阅组件和图片控件，未改写正文。导入清单见 `content/substack-import.json`。这次是一次性迁移，后续新增文章可继续用 Markdown 维护。论文的 Accepted 和 Under review 状态依作者资料整理，不代表实时检索核验。
+博客已从 https://barytes.substack.com 搬运目前归档的全部 6 篇公开文章，保留原文、原始发布日期和来源链接。封面插画放在 `public/blog/{slug}.png`，文内配图也在同一目录。仅去掉 Substack 订阅组件和图片控件，未改写正文。导入清单见 `content/substack-import.json`。这次是一次性迁移，后续新增文章可继续用 Markdown 维护。论文的 Accepted 和 Under review 状态依作者资料整理，不代表实时检索核验。
 
 网站已配置部署流程；本地构建成功不等于已在 GitHub 上部署。需要推送代码并启用 Pages 后才会上线。
 
