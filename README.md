@@ -84,7 +84,7 @@ A description of the work.
 
 个人资料、教育经历、作者顺序与论文状态整理自用户指定的「12 week year／全局内容／个人资产／USER.md」及 PhD CV，采用 CV 中的 M.Eng.（2023–2026）而非旧站的 MPhil student 表述。论文 PDF 来自同目录的三份论文文件。未复制私人规划、成绩单、电话或其他个人材料。
 
-博客已从 https://barytes.substack.com 搬运目前归档的全部 6 篇公开文章，保留原文、原始发布日期和来源链接。封面插画放在 `public/blog/{slug}.png`，文内配图也在同一目录。仅去掉 Substack 订阅组件和图片控件，未改写正文。导入清单见 `content/substack-import.json`。这次是一次性迁移，后续新增文章可继续用 Markdown 维护。论文的 Accepted 和 Under review 状态依作者资料整理，不代表实时检索核验。
+博客已从 https://barytes.substack.com 搬运目前归档的全部 6 篇公开文章，保留原文、原始发布日期和来源链接。封面插画放在 `public/blog/{slug}.png`，文内配图也在同一目录。仅去掉 Substack 订阅组件和图片控件，未改写正文。导入清单见 `content/substack-import.json`。这次是一次性迁移，后续新增文章可继续用 Markdown 维护。Computer Networks 论文的出版状态、卷号、文章号和 DOI 已于 2026-10-10 核对 [Crossref 正式记录](https://api.crossref.org/works/10.1016/j.comnet.2026.112819)及[出版社记录](https://api.elsevier.com/content/article/pii/S1389128626008315?httpAccept=application%2Fjson)；TMC 论文的 Under review 状态仍依作者资料整理。
 
 网站已配置部署流程；本地构建成功不等于已在 GitHub 上部署。需要推送代码并启用 Pages 后才会上线。
 

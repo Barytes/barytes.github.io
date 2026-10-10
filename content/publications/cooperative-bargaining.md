@@ -2,12 +2,13 @@
 title: "Efficient and Fair Computing Power Provision for Edge Systems: A Cooperative Bargaining Approach"
 year: 2026
 venue: Computer Networks
-status: Accepted
+status: Published
 kind: Journal
 order: 2
 authors: Beiyan Liu, Yifei Wu, Guocheng Liao, Jianguo Chen, Qian Ma, and Xu Chen
 description: Separating the creation of cooperation surplus from its fair distribution through Nash bargaining.
 pdf: /papers/computer-networks.pdf
+doi: https://doi.org/10.1016/j.comnet.2026.112819
 ---
 ## Overview
 
@@ -25,4 +26,4 @@ The study uses Google ClusterData 2019 and Shanghai Telecom mobility traces, inc
 
 ## Publication
 
-**Accepted for publication in Computer Networks**, according to the author’s current CV. The linked PDF is the manuscript version; final publication metadata will be added when available.
+Published in **Computer Networks, Volume 290 (November 2026), Article 112819**. [DOI: 10.1016/j.comnet.2026.112819](https://doi.org/10.1016/j.comnet.2026.112819) links to the published record. The linked PDF is the author-provided manuscript version.
