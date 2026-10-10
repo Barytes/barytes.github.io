@@ -15,7 +15,7 @@ Do things for fun, optimize for fun.
 7. 不需要跟别人比，因为每个人的set of hobbies不一样
 
 ```link-card
-url: "https://www.youtube.com/watch?v=CmWy7ah8Esg"
-title: "Build Your Day Backwards"
+url: "https://www.youtube.com/watch?v=qKFWnrHFuZQ"
+title: "Your Best Defense Against Brain Rot"
 description: "The Mindset Mentor Podcast · YouTube"
 ```
