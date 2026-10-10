@@ -5,7 +5,7 @@ let count=0;const failures=[];
 function walk(dir){for(const f of fs.readdirSync(dir)){const file=path.join(dir,f);if(fs.statSync(file).isDirectory())walk(file);else if(f.endsWith('.html')){
  count++;const html=fs.readFileSync(file,'utf8');
  for(const match of html.matchAll(/(?:href|src)="([^"#]+)(?:#[^"]*)?"/g)){
-  let target=match[1];if(/^(https?:|mailto:|data:)/.test(target))continue;
+  let target=match[1].split('?')[0];if(/^(https?:|mailto:|data:)/.test(target))continue;
   if(base&&!target.startsWith(base+'/')){failures.push(`${file}: missing base path in ${target}`);continue;}
   if(base)target=target.slice(base.length);
   const dest=path.join(root,target);if(!fs.existsSync(dest))failures.push(`${file}: missing ${target}`);

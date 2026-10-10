@@ -2,6 +2,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import matter from 'gray-matter';
 import { marked } from 'marked';
+import { createHash } from 'node:crypto';
 const site = JSON.parse(fs.readFileSync('src/site.json', 'utf8'));
 const base = (process.env.BASE_PATH || '').replace(/\/$/, '');
 const url = p => `${base}${p}`;
@@ -15,7 +16,10 @@ const papers = read('publications').sort((a,b) => a.order-b.order);
 const date = d => new Date(d).toLocaleDateString('en-US',{month:'long',day:'numeric',year:'numeric', timeZone:'UTC'});
 const arrow = '<span aria-hidden="true">↗</span>';
 const link = (p,t,cl='text-link') => `<a class="${cl}" href="${url(p)}">${t}</a>`;
-const coverOf = slug => ['.png','.jpg','.jpeg','.webp'].map(ext=>`/blog/${slug}${ext}`).find(p=>fs.existsSync(`public${p}`))||'';
+const coverOf = slug => {
+ const cover = ['.png','.jpg','.jpeg','.webp'].map(ext=>`/blog/${slug}${ext}`).find(p=>fs.existsSync(`public${p}`));
+ return cover ? `${cover}?v=${createHash('sha256').update(fs.readFileSync(`public${cover}`)).digest('hex').slice(0,12)}` : '';
+};
 function layout(title, section, body, route='/', description=site.description, lang='en', image='') {
  return `<!doctype html><html lang="${esc(lang)}"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="description" content="${esc(description)}"><meta name="theme-color" content="#f7f5ef"><title>${esc(title)}${title===site.name?'':` — ${site.name}`}</title><link rel="canonical" href="${site.url}${url(route)}"><meta property="og:title" content="${esc(title)}"><meta property="og:description" content="${esc(description)}"><meta property="og:type" content="${route.includes('/blog/')&&route!='/blog/'&&!route.includes('/category/')?'article':'website'}"><meta property="og:url" content="${site.url}${url(route)}">${image?`<meta property="og:image" content="${esc(site.url)}${url(image)}">`:''}<link rel="icon" href="data:,"><link rel="stylesheet" href="${url('/style.css')}"></head><body><a class="skip" href="#main">Skip to content</a><header class="header"><a class="wordmark" href="${url('/')}">${site.name}</a><nav aria-label="Main navigation">${[['/','About'],['/blog/','Blog'],['/publications/','Publications']].map(([p,t])=>`<a href="${url(p)}" ${section===t?'aria-current="page"':''}>${t}</a>`).join('')}</nav><a class="header-contact" href="mailto:${site.email}">Get in touch ${arrow}</a></header><main id="main">${body}</main><footer><div class="footer-top"><a class="wordmark" href="${url('/')}">${site.name}<span class="chinese">${site.chineseName}</span></a><div><a href="mailto:${site.email}">Email ${arrow}</a><a href="${site.github}">GitHub ${arrow}</a></div></div><div class="footer-bottom"><span>© ${new Date().getFullYear()} ${site.name}</span><a href="#main">Back to top ↑</a></div></footer></body></html>`;
 }
