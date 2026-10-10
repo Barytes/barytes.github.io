@@ -35,6 +35,7 @@ npm run preview
 - `src/style.css`：所有页面的视觉样式与移动端适配。
 - `content/blog/*.md`：博客文章，文件名生成文章 URL。
 - `content/publications/*.md`：论文详情，文件名生成论文 URL。
+- `content/thoughts/*.md`：短想原稿，一份文件组织一组 thread，正文独立于网页存储。
 - `public/blog/`：博客图片。封面文件名必须与文章 slug 一致，例如 `content/blog/auto-research.md` 对应 `public/blog/auto-research.png`；构建时自动出现在列表卡片和文章页。文内配图也放在此目录，正文用 `/blog/filename` 引用。
 - `public/papers/`：论文 PDF。
 
@@ -95,3 +96,29 @@ A description of the work.
 ## 博客分类
 
 文章 front matter 中的 `category` 是分类 URL 标识，`tag` 是显示名称。当前分类为 AI 与 Agent、职业思考、个人成长、知识管理。构建时自动生成分类入口和独立分类页；无需 JavaScript，支持直接访问、刷新和浏览器前进后退。新增分类时，在文章里填写新的 `category` 和 `tag` 即可。Substack 原始来源保存在文章元数据中，不在页面显示来源说明。
+
+## Thoughts
+
+导航和页面标题为 Thoughts，地址为 `/thoughts/`。每组内容完整展开，按发布时间倒序，每页 20 组。页面沿用全站样式；多片段用细线连接，没有复制、分享或永久链接操作。首页结构保持不变。
+
+在 `content/thoughts/` 新建一份 Markdown，例如：
+
+```md
+---
+date: "2026-10-10T20:30:00+08:00"
+lang: "zh-CN"
+status: "draft"
+---
+
+一个简短的想法，可以有几个普通段落。
+
+<!-- more -->
+
+顺着这个想法继续说。这是同一组 thread 的第二个片段。
+```
+
+`date` 必须是带引号和时区的完整时间，页面日期按北京时间显示。`title` 可选，默认直接展示正文；`lang` 默认 `zh-CN`。独占一行的 `<!-- more -->` 分隔片段，普通空行只分段。单片段也可以发布。正文支持站内链接、列表、图片等 Markdown 写法。
+
+`status` 必须为 `draft` 或 `published`。正式构建只收录 `published`，草稿不进入公开页面或站点地图。运行 `npm run dev:drafts`，打开 `/thoughts/` 可以连同草稿预览，每组草稿有明确标记，预览页面设置 `noindex`，并输出到独立的 `dist-drafts/`。普通 `npm run dev` 和部署构建不会展示草稿。现有部署流程只上传正式构建的 `dist/`，草稿预览不会覆盖正式构建产物。
+
+需要转发到其他平台时，Agent 直接读取对应 Markdown 原稿，去掉元数据并按片段整理即可；不需要从页面提取文案，也没有另一份需要同步维护的导出文件。

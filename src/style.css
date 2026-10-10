@@ -10,3 +10,43 @@
 .article-cover{margin:28px 0 0}
 .article-cover img{width:100%;height:auto;display:block;border-radius:3px}
 @media(max-width:680px){.post-art:has(img){height:auto}}
+
+/* Thoughts: dates in the margin, connected passages in a quiet reading column. */
+.thread-list{padding-bottom:80px;border-top:1px solid var(--line)}
+.thread{display:grid;grid-template-columns:180px minmax(0,700px);gap:32px;padding:42px 0;border-bottom:1px solid var(--line)}
+.thread-meta{display:flex;flex-direction:column;align-items:flex-start;gap:12px;padding-top:6px;font:12px/1.6 var(--sans);color:var(--muted);font-variant-numeric:tabular-nums}
+.thread-draft{font-size:11px;color:var(--accent)}
+.thread-title{font:26px/1.5 var(--serif);margin:0 0 24px;overflow-wrap:anywhere}
+.thread-parts{list-style:none;padding:0;margin:0}
+.thread-part{position:relative;min-width:0}
+.thread-connected .thread-part{padding:0 0 28px 28px}
+.thread-connected .thread-part:last-child{padding-bottom:0}
+.thread-connected .thread-part::before{content:'';position:absolute;left:0;top:13px;width:5px;height:5px;border-radius:50%;background:var(--accent)}
+.thread-connected .thread-part:not(:last-child)::after{content:'';position:absolute;left:2px;top:23px;bottom:-3px;width:1px;background:var(--line)}
+.thread-prose{margin:0;max-width:none;font-size:18px;line-height:1.9}
+.thread-prose p{line-height:1.9;margin:0 0 14px}
+.thread-prose>:last-child{margin-bottom:0}
+.thread-prose h2,.thread-prose h3{font:22px/1.5 var(--serif);margin:22px 0 12px}
+.thread-prose>:first-child{margin-top:0}
+.thread-prose blockquote{font:inherit;margin:16px 0;padding:0 18px;background:transparent}
+.thread-prose blockquote p{margin:0}
+.thread-prose ul,.thread-prose ol{padding-left:1.4em}
+.thread-prose img{display:block;max-width:100%;height:auto}
+.thread-empty{padding:48px 0 100px;color:var(--muted);font-size:15px}
+.thread-pagination{display:flex;justify-content:space-between;align-items:center;gap:20px;padding-top:32px}
+.thread-pagination>span{flex:1}
+.thread-pagination>span:last-child{text-align:right}
+.thread-pagination .thread-page-count{flex:0 0 auto;font:12px var(--sans);color:var(--muted)}
+@media(max-width:1000px){.thread{grid-template-columns:130px minmax(0,700px);gap:24px}}
+@media(max-width:680px){
+ .header{height:auto;min-height:86px;flex-wrap:wrap;gap:15px;padding:22px 0}
+ .header nav{flex-wrap:wrap;gap:8px 20px;font-size:12px}
+ .thread-list{padding-bottom:48px}
+ .thread{grid-template-columns:minmax(0,1fr);gap:20px;padding:30px 0}
+ .thread-meta{flex-direction:row;align-items:center;gap:16px;padding-top:0;font-size:11px}
+ .thread-title{font-size:23px;margin-bottom:20px}
+ .thread-prose{font-size:17px}
+ .thread-connected .thread-part{padding-left:22px;padding-bottom:24px}
+ .thread-connected .thread-part::before{top:12px}
+ .thread-connected .thread-part:not(:last-child)::after{top:22px}
+}

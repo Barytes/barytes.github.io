@@ -4,3 +4,4 @@ dist/
 output/
 .playwright-cli/
 drafts/
+dist-drafts/

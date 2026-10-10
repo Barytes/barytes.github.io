@@ -1,6 +1,6 @@
 import fs from 'node:fs';
 import path from 'node:path';
-const root=path.resolve('dist');const base=(process.env.BASE_PATH||'').replace(/\/$/,'');
+const root=path.resolve(process.env.PREVIEW_DRAFTS==='1'?'dist-drafts':'dist');const base=(process.env.BASE_PATH||'').replace(/\/$/,'');
 let count=0;const failures=[];
 function walk(dir){for(const f of fs.readdirSync(dir)){const file=path.join(dir,f);if(fs.statSync(file).isDirectory())walk(file);else if(f.endsWith('.html')){
  count++;const html=fs.readFileSync(file,'utf8');

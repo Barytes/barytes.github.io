@@ -13,6 +13,20 @@ const read = type => fs.readdirSync(`content/${type}`).filter(f => f.endsWith('.
 });
 const posts = read('blog').sort((a,b) => new Date(b.date)-new Date(a.date));
 const papers = read('publications').sort((a,b) => a.order-b.order);
+const previewDrafts = process.env.PREVIEW_DRAFTS === '1';
+const output = previewDrafts ? 'dist-drafts' : 'dist';
+const threads = read('thoughts').filter(t => {
+ if (!['draft', 'published'].includes(t.status)) throw new Error(`Thread ${t.slug}: status must be draft or published`);
+ return t.status === 'published' || previewDrafts;
+}).map(t => {
+ if (typeof t.date !== 'string' || !/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(Z|[+-]\d{2}:\d{2})$/.test(t.date) || !Number.isFinite(Date.parse(t.date))) {
+  throw new Error(`Thread ${t.slug}: date must be a quoted ISO timestamp with timezone`);
+ }
+ const parts = t.content.trim().split(/^\s*<!-- more -->\s*$/m).map(p => p.trim());
+ if (parts.some(p => !p)) throw new Error(`Thread ${t.slug}: each segment needs content`);
+ return {...t, parts};
+}).sort((a,b) => Date.parse(b.date)-Date.parse(a.date) || a.slug.localeCompare(b.slug));
+const markdown = content => marked.parse(content).replace(/href="\/(?!\/)/g,`href="${base}/`).replace(/src="\/(?!\/)/g,`src="${base}/`);
 const date = d => new Date(d).toLocaleDateString('en-US',{month:'long',day:'numeric',year:'numeric', timeZone:'UTC'});
 const arrow = '<span aria-hidden="true">↗</span>';
 const link = (p,t,cl='text-link') => `<a class="${cl}" href="${url(p)}">${t}</a>`;
@@ -21,7 +35,7 @@ const coverOf = slug => {
  return cover ? `${cover}?v=${createHash('sha256').update(fs.readFileSync(`public${cover}`)).digest('hex').slice(0,12)}` : '';
 };
 function layout(title, section, body, route='/', description=site.description, lang='en', image='') {
- return `<!doctype html><html lang="${esc(lang)}"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="description" content="${esc(description)}"><meta name="theme-color" content="#f7f5ef"><title>${esc(title)}${title===site.name?'':` — ${site.name}`}</title><link rel="canonical" href="${site.url}${url(route)}"><meta property="og:title" content="${esc(title)}"><meta property="og:description" content="${esc(description)}"><meta property="og:type" content="${route.includes('/blog/')&&route!='/blog/'&&!route.includes('/category/')?'article':'website'}"><meta property="og:url" content="${site.url}${url(route)}">${image?`<meta property="og:image" content="${esc(site.url)}${url(image)}">`:''}<link rel="icon" href="data:,"><link rel="stylesheet" href="${url('/style.css')}"></head><body><a class="skip" href="#main">Skip to content</a><header class="header"><a class="wordmark" href="${url('/')}">${site.name}</a><nav aria-label="Main navigation">${[['/','About'],['/blog/','Blog'],['/publications/','Publications']].map(([p,t])=>`<a href="${url(p)}" ${section===t?'aria-current="page"':''}>${t}</a>`).join('')}</nav><a class="header-contact" href="mailto:${site.email}">Get in touch ${arrow}</a></header><main id="main">${body}</main><footer><div class="footer-top"><a class="wordmark" href="${url('/')}">${site.name}<span class="chinese">${site.chineseName}</span></a><div><a href="mailto:${site.email}">Email ${arrow}</a><a href="${site.github}">GitHub ${arrow}</a></div></div><div class="footer-bottom"><span>© ${new Date().getFullYear()} ${site.name}</span><a href="#main">Back to top ↑</a></div></footer></body></html>`;
+ return `<!doctype html><html lang="${esc(lang)}"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="description" content="${esc(description)}">${previewDrafts?'<meta name="robots" content="noindex, nofollow">':''}<meta name="theme-color" content="#f7f5ef"><title>${esc(title)}${title===site.name?'':` — ${site.name}`}</title><link rel="canonical" href="${site.url}${url(route)}"><meta property="og:title" content="${esc(title)}"><meta property="og:description" content="${esc(description)}"><meta property="og:type" content="${route.includes('/blog/')&&route!='/blog/'&&!route.includes('/category/')?'article':'website'}"><meta property="og:url" content="${site.url}${url(route)}">${image?`<meta property="og:image" content="${esc(site.url)}${url(image)}">`:''}<link rel="icon" href="data:,"><link rel="stylesheet" href="${url('/style.css')}"></head><body><a class="skip" href="#main">Skip to content</a><header class="header"><a class="wordmark" href="${url('/')}">${site.name}</a><nav aria-label="Main navigation">${[['/','About'],['/blog/','Blog'],['/thoughts/','Thoughts'],['/publications/','Publications']].map(([p,t])=>`<a href="${url(p)}" ${section===t?'aria-current="page"':''}>${t}</a>`).join('')}</nav><a class="header-contact" href="mailto:${site.email}">Get in touch ${arrow}</a></header><main id="main">${body}</main><footer><div class="footer-top"><a class="wordmark" href="${url('/')}">${site.name}<span class="chinese">${site.chineseName}</span></a><div><a href="mailto:${site.email}">Email ${arrow}</a><a href="${site.github}">GitHub ${arrow}</a></div></div><div class="footer-bottom"><span>© ${new Date().getFullYear()} ${site.name}</span><a href="#main">Back to top ↑</a></div></footer></body></html>`;
 }
 function paperRow(p,i) { return `<a class="paper-row" href="${url(`/publications/${p.slug}/`)}"><span class="row-number">${String(i+1).padStart(2,'0')}</span><div><div class="meta">${esc(p.venue)} · ${p.year}<span class="status ${p.status==='Under review'?'muted':''}">${esc(p.status)}</span></div><h3>${esc(p.title)}</h3></div><span class="row-arrow" aria-hidden="true">↗</span></a>`; }
 function postCard(p,i) {
@@ -32,8 +46,8 @@ function postCard(p,i) {
  return `<a class="post-card" href="${url(`/blog/${p.slug}/`)}">${art}<div class="meta">${esc(p.tag)} <span>· ${p.sample?'示例草稿':date(p.date)}</span></div><h3>${esc(p.title)}</h3><p>${esc(p.description)}</p><span class="read-link">Read the note <span aria-hidden="true">↗</span></span></a>`;
 }
 const paths=[];
-function write(route, html){const target = route.endsWith('.html')?`dist${route}`:`dist${route}index.html`;fs.mkdirSync(path.dirname(target),{recursive:true});fs.writeFileSync(target,html);paths.push(route);}
-fs.rmSync('dist',{recursive:true,force:true});fs.mkdirSync('dist');fs.cpSync('public','dist',{recursive:true});fs.copyFileSync('src/style.css','dist/style.css');
+function write(route, html){const target = route.endsWith('.html')?`${output}${route}`:`${output}${route}index.html`;fs.mkdirSync(path.dirname(target),{recursive:true});fs.writeFileSync(target,html);paths.push(route);}
+fs.rmSync(output,{recursive:true,force:true});fs.mkdirSync(output);fs.cpSync('public',output,{recursive:true});fs.copyFileSync('src/style.css',`${output}/style.css`);
 const backgroundSection = `<section class="education-section"><div><h2>Education</h2></div><div><div class="education-row"><span>2023 — 2026</span><h3>M.Eng. in Software Engineering</h3><p>Sun Yat-sen University · Supervisor: Prof. Guocheng Liao</p></div><div class="education-row"><span>2018 — 2022</span><h3>B.Eng. in Software Engineering</h3><p>Sun Yat-sen University</p></div></div></section>
 `;
 const categories = [...new Map(posts.map(p => [p.category, p.tag])).entries()];
@@ -49,11 +63,24 @@ function blogPage(active = '') {
 }
 blogPage();
 for (const [key] of categories) blogPage(key);
+const threadDate = d => new Intl.DateTimeFormat('en-GB', {year:'numeric',month:'2-digit',day:'2-digit',timeZone:'Asia/Shanghai'}).format(new Date(d)).split('/').reverse().join('.');
+function threadRow(t) {
+ const segments = t.parts.map(part => `<li class="thread-part"><div class="prose thread-prose">${markdown(part)}</div></li>`).join('');
+ return `<article class="thread" lang="${esc(t.lang || 'zh-CN')}" aria-label="${esc(t.title || `Thread · ${threadDate(t.date)}`)}"><header class="thread-meta"><time datetime="${esc(t.date)}">${threadDate(t.date)}</time>${t.status==='draft'?'<span class="thread-draft">草稿预览</span>':''}</header><div class="thread-content">${t.title?`<h2 class="thread-title">${esc(t.title)}</h2>`:''}<ol class="thread-parts ${t.parts.length>1?'thread-connected':'thread-single'}" aria-label="Thread 片段">${segments}</ol></div></article>`;
+}
+const threadPageSize = 20;
+const threadPageCount = Math.max(1, Math.ceil(threads.length/threadPageSize));
+const threadRoute = page => page === 1 ? '/thoughts/' : `/thoughts/page/${page}/`;
+for (let page=1; page<=threadPageCount; page++) {
+ const entries = threads.slice((page-1)*threadPageSize, page*threadPageSize);
+ const pagination = threadPageCount>1 ? `<nav class="thread-pagination" aria-label="Thoughts 分页"><span>${page>1?link(threadRoute(page-1),'← 较新的'):''}</span><span class="thread-page-count">${page} / ${threadPageCount}</span><span>${page<threadPageCount?link(threadRoute(page+1),'较早的 →'):''}</span></nav>` : '';
+ write(threadRoute(page), layout(page===1?'Thoughts':`Thoughts — ${page}`, 'Thoughts', `<section class="page-heading"><h1>Thoughts</h1></section><section class="thread-list" aria-label="短想">${entries.length?entries.map(threadRow).join(''):'<p class="thread-empty">这里将记录一些简短的想法。</p>'}${pagination}</section>`, threadRoute(page), '简短的想法，以及顺着它们展开的思考。', 'zh-CN'));
+}
 write('/publications/',layout('Publications','Publications',`<section class="page-heading"><h1>Publications</h1></section><section class="listing">${papers.map(paperRow).join('')}</section>`,'/publications/'));
 for(const p of [...posts,...papers]){
  const paper = p.type==='publications';
  const route=`/${p.type}/${p.slug}/`;
- const body=marked.parse(p.content).replace(/href="\/(?!\/)/g,`href="${base}/`).replace(/src="\/(?!\/)/g,`src="${base}/`);
+ const body=markdown(p.content);
  const related=paper?papers.filter(x=>x.slug!==p.slug):posts.filter(x=>x.slug!==p.slug);
  const cover = paper ? '' : coverOf(p.slug);
  const coverHtml = cover ? `<figure class="article-cover"><img src="${url(cover)}" alt="${esc(p.title)}"></figure>` : '';
@@ -66,7 +93,7 @@ const writingSection = `<section class="section"><div class="section-heading"><h
 write('/',layout(site.name,'About',indexHero+researchSection+writingSection+backgroundSection));
 
 write('/404.html',layout('Page not found','',`<section class="page-heading not-found"><h1>This page wandered off.</h1>${link('/','Back to home ↗','button')}</section>`,'/404.html'));
-fs.writeFileSync('dist/.nojekyll','');
-fs.writeFileSync('dist/robots.txt',`User-agent: *\nAllow: /\nSitemap: ${site.url}${base}/sitemap.xml\n`);
-fs.writeFileSync('dist/sitemap.xml',`<?xml version="1.0" encoding="UTF-8"?><urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">${paths.filter(p=>p!='/404.html').map(p=>`<url><loc>${site.url}${url(p)}</loc></url>`).join('')}</urlset>`);
-console.log(`Built ${paths.length} pages → dist/ (base: ${base || '/'})`);
+fs.writeFileSync(`${output}/.nojekyll`,'');
+fs.writeFileSync(`${output}/robots.txt`,previewDrafts?'User-agent: *\nDisallow: /\n':`User-agent: *\nAllow: /\nSitemap: ${site.url}${base}/sitemap.xml\n`);
+fs.writeFileSync(`${output}/sitemap.xml`,`<?xml version="1.0" encoding="UTF-8"?><urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">${paths.filter(p=>p!='/404.html'&&!(previewDrafts&&p.startsWith('/thoughts/'))).map(p=>`<url><loc>${site.url}${url(p)}</loc></url>`).join('')}</urlset>`);
+console.log(`Built ${paths.length} pages → ${output}/ (base: ${base || '/'})`);
