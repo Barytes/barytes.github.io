@@ -14,4 +14,8 @@ Do things for fun, optimize for fun.
 6. 让你的人生更鲁棒，人生意义有多个支柱支撑
 7. 不需要跟别人比，因为每个人的set of hobbies不一样
 
-[https://www.youtube.com/watch?v=CmWy7ah8Esg](https://www.youtube.com/watch?v=CmWy7ah8Esg)
+```link-card
+url: "https://www.youtube.com/watch?v=CmWy7ah8Esg"
+title: "Build Your Day Backwards"
+description: "The Mindset Mentor Podcast · YouTube"
+```
