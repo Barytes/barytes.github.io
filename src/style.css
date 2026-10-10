@@ -31,7 +31,14 @@
 .thread-prose blockquote{font:inherit;margin:16px 0;padding:0 18px;background:transparent}
 .thread-prose blockquote p{margin:0}
 .thread-prose ul,.thread-prose ol{padding-left:1.4em}
-.thread-prose img{display:block;max-width:100%;height:auto}
+.thread-prose img{display:block;max-width:100%;height:auto;border-radius:3px}
+.thread-prose .thought-link-card{display:flex;align-items:center;gap:20px;margin:18px 0;padding:18px;border:1px solid var(--line);border-radius:4px;color:var(--ink);text-decoration:none;transition:border-color .18s,background .18s}
+.thread-prose .thought-link-card:hover{border-color:var(--accent);background:#eeebe2}
+.thought-link-copy{display:flex;flex-direction:column;gap:7px;min-width:0}
+.thought-link-title{font:19px/1.5 var(--serif)}
+.thought-link-description{font:13px/1.7 var(--sans);color:var(--muted);display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:3;overflow:hidden}
+.thought-link-source{display:flex;align-items:center;gap:10px;margin-top:3px;font:11px/1.6 var(--sans);color:var(--muted)}
+.thread-prose .thought-link-image{width:104px;height:104px;flex:0 0 104px;object-fit:cover}
 .thread-empty{padding:48px 0 100px;color:var(--muted);font-size:15px}
 .thread-pagination{display:flex;justify-content:space-between;align-items:center;gap:20px;padding-top:32px}
 .thread-pagination>span{flex:1}
@@ -46,6 +53,9 @@
  .thread-meta{flex-direction:row;align-items:center;gap:16px;padding-top:0;font-size:11px}
  .thread-title{font-size:23px;margin-bottom:20px}
  .thread-prose{font-size:17px}
+ .thread-prose .thought-link-card{gap:14px;padding:14px}
+ .thread-prose .thought-link-image{width:76px;height:76px;flex-basis:76px}
+ .thought-link-title{font-size:17px}
  .thread-connected .thread-part{padding-left:22px;padding-bottom:24px}
  .thread-connected .thread-part::before{top:12px}
  .thread-connected .thread-part:not(:last-child)::after{top:22px}

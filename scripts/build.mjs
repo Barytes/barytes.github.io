@@ -1,7 +1,7 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import matter from 'gray-matter';
-import { marked } from 'marked';
+import { marked, Marked } from 'marked';
 import { createHash } from 'node:crypto';
 const site = JSON.parse(fs.readFileSync('src/site.json', 'utf8'));
 const base = (process.env.BASE_PATH || '').replace(/\/$/, '');
@@ -26,7 +26,29 @@ const threads = read('thoughts').filter(t => {
  if (parts.some(p => !p)) throw new Error(`Thread ${t.slug}: each segment needs content`);
  return {...t, parts};
 }).sort((a,b) => Date.parse(b.date)-Date.parse(a.date) || a.slug.localeCompare(b.slug));
-const markdown = content => marked.parse(content).replace(/href="\/(?!\/)/g,`href="${base}/`).replace(/src="\/(?!\/)/g,`src="${base}/`);
+const markdown = (content, parser = marked) => parser.parse(content).replace(/href="\/(?!\/)/g,`href="${base}/`).replace(/src="\/(?!\/)/g,`src="${base}/`);
+function attachmentUrl(value, field) {
+ if (typeof value !== 'string' || !value.trim() || /[\s\\]/.test(value)) throw new Error(`link-card: ${field} must be an HTTP(S) URL or a /path`);
+ const internal = value.startsWith('/') && !value.startsWith('//');
+ const parsed = new URL(value, internal ? site.url : undefined);
+ if (!['http:', 'https:'].includes(parsed.protocol)) throw new Error(`link-card: ${field} must use HTTP(S)`);
+ return internal ? value : parsed.href;
+}
+const thoughtMarkdown = new Marked();
+thoughtMarkdown.use({renderer: {
+ code({lang, text}) {
+  if (lang !== 'link-card') return false;
+  const {data} = matter(`---\n${text}\n---`);
+  const href = attachmentUrl(data.url, 'url');
+  if (typeof data.title !== 'string' || !data.title.trim()) throw new Error('link-card: title is required');
+  for (const field of ['description', 'image']) {
+   if (data[field] !== undefined && typeof data[field] !== 'string') throw new Error(`link-card: ${field} must be text`);
+  }
+  const image = data.image ? attachmentUrl(data.image, 'image') : '';
+  const host = new URL(href, site.url).hostname;
+  return `<a class="thought-link-card${image?' has-image':''}" href="${esc(href)}">${image?`<img class="thought-link-image" src="${esc(image)}" alt="" loading="lazy" decoding="async">`:''}<span class="thought-link-copy"><span class="thought-link-title">${esc(data.title)}</span>${data.description?`<span class="thought-link-description">${esc(data.description)}</span>`:''}<span class="thought-link-source">${esc(host)} <span aria-hidden="true">↗</span></span></span></a>\n`;
+ }
+}});
 const date = d => new Date(d).toLocaleDateString('en-US',{month:'long',day:'numeric',year:'numeric', timeZone:'UTC'});
 const arrow = '<span aria-hidden="true">↗</span>';
 const link = (p,t,cl='text-link') => `<a class="${cl}" href="${url(p)}">${t}</a>`;
@@ -65,7 +87,10 @@ blogPage();
 for (const [key] of categories) blogPage(key);
 const threadDate = d => new Intl.DateTimeFormat('en-GB', {year:'numeric',month:'2-digit',day:'2-digit',timeZone:'Asia/Shanghai'}).format(new Date(d)).split('/').reverse().join('.');
 function threadRow(t) {
- const segments = t.parts.map(part => `<li class="thread-part"><div class="prose thread-prose">${markdown(part)}</div></li>`).join('');
+ const segments = t.parts.map((part, index) => {
+  try { return `<li class="thread-part"><div class="prose thread-prose">${markdown(part, thoughtMarkdown)}</div></li>`; }
+  catch (error) { throw new Error(`Thread ${t.slug}, segment ${index+1}: ${error.message}`); }
+ }).join('');
  return `<article class="thread" lang="${esc(t.lang || 'zh-CN')}" aria-label="${esc(t.title || `Thread · ${threadDate(t.date)}`)}"><header class="thread-meta"><time datetime="${esc(t.date)}">${threadDate(t.date)}</time>${t.status==='draft'?'<span class="thread-draft">草稿预览</span>':''}</header><div class="thread-content">${t.title?`<h2 class="thread-title">${esc(t.title)}</h2>`:''}<ol class="thread-parts ${t.parts.length>1?'thread-connected':'thread-single'}" aria-label="Thread 片段">${segments}</ol></div></article>`;
 }
 const threadPageSize = 20;

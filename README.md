@@ -38,6 +38,7 @@ npm run preview
 - `content/thoughts/*.md`：短想原稿，一份文件组织一组 thread，正文独立于网页存储。
 - `public/blog/`：博客图片。封面文件名必须与文章 slug 一致，例如 `content/blog/auto-research.md` 对应 `public/blog/auto-research.png`；构建时自动出现在列表卡片和文章页。文内配图也放在此目录，正文用 `/blog/filename` 引用。
 - `public/papers/`：论文 PDF。
+- `public/thoughts/`：Thoughts 的附图和链接卡片缩略图，正文使用 `/thoughts/文件名` 引用。
 
 新增博客：
 
@@ -120,5 +121,32 @@ status: "draft"
 `date` 必须是带引号和时区的完整时间，页面日期按北京时间显示。`title` 可选，默认直接展示正文；`lang` 默认 `zh-CN`。独占一行的 `<!-- more -->` 分隔片段，普通空行只分段。单片段也可以发布。正文支持站内链接、列表、图片等 Markdown 写法。
 
 `status` 必须为 `draft` 或 `published`。正式构建只收录 `published`，草稿不进入公开页面或站点地图。运行 `npm run dev:drafts`，打开 `/thoughts/` 可以连同草稿预览，每组草稿有明确标记，预览页面设置 `noindex`，并输出到独立的 `dist-drafts/`。普通 `npm run dev` 和部署构建不会展示草稿。现有部署流程只上传正式构建的 `dist/`，草稿预览不会覆盖正式构建产物。
+
+### 附图片与链接卡片
+
+图片放进 `public/thoughts/`，在对应片段中使用普通 Markdown 图片语法。多张图片可以依次写入，按原始比例展示并随屏幕宽度缩放：
+
+```md
+这张截图记录了当时的设计。
+
+![设计截图的文字说明](/thoughts/design-example.png)
+```
+
+普通链接仍然显示为文字。需要卡片时，在对应片段中插入 `link-card` 代码块，块内使用 YAML：
+
+````md
+一篇值得继续读的文章。
+
+```link-card
+url: "https://example.com/article"
+title: "文章标题"
+description: "这篇文章讨论的具体问题。"
+image: "/thoughts/article-preview.jpg"
+```
+````
+
+`url` 和 `title` 必填；`description` 和 `image` 可省略，无图时展示文字卡片。链接与缩略图地址支持 HTTP(S) 网址或 `/` 开头的站内路径，站内路径自动适配 `BASE_PATH`。整张卡片可点击，来源域名从 `url` 生成。一个片段可以放多张图片、多张卡片，也可以和列表、引用、普通代码块混排。
+
+卡片资料直接保存在 Markdown 原稿中，网站构建和读者浏览时不抓取目标网页。整理内容时可由 Agent 读取用户提供的网址，核对后填入标题、摘要和可选缩略图；仅粘贴网址不会自动生成卡片。优先将获准使用的缩略图放进 `public/thoughts/`，也可以引用外部图片。这里只增加附件能力，新增或调整实际 Thoughts 仍按 `AGENTS.md` 的确认流程执行。
 
 需要转发到其他平台时，Agent 直接读取对应 Markdown 原稿，去掉元数据并按片段整理即可；不需要从页面提取文案，也没有另一份需要同步维护的导出文件。
