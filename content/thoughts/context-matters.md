@@ -10,4 +10,7 @@ Context 确实很重要。
 
 带着作品去找人，因为最稀缺的信号是「我已经开始做了」。
 
-[相关阅读](https://mp.weixin.qq.com/s/Ot-lSf2EkXbo1Sql619IhQ)
+```link-card
+url: "https://mp.weixin.qq.com/s/Ot-lSf2EkXbo1Sql619IhQ"
+title: "相关阅读"
+```
