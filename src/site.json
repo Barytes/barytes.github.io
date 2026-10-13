@@ -4,7 +4,16 @@
   "url": "https://barytes.github.io",
   "email": "liuby57@foxmail.com",
   "github": "https://github.com/Barytes",
-  "description": "Beiyan Liu — research on strategic interaction, intelligent agents, and the systems they share.",
-  "intro": "I’m Beiyan, a software engineering graduate from Sun Yat-sen University. My research has explored how self-interested participants share resources, make decisions, and find ways to cooperate.",
-  "current": "I learn stuff, build stuff, write stuff, and have fun along the way."
+  "description": {
+    "zh": "刘倍延 — 研究策略交互、智能体以及它们共享的系统。",
+    "en": "Beiyan Liu — research on strategic interaction, intelligent agents, and the systems they share."
+  },
+  "intro": {
+    "zh": "我是刘倍延，毕业于中山大学软件工程专业。我的研究关注有自身利益诉求的参与者如何共享资源、作出决策，并找到合作的方式。",
+    "en": "I’m Beiyan, a software engineering graduate from Sun Yat-sen University. My research has explored how self-interested participants share resources, make decisions, and find ways to cooperate."
+  },
+  "current": {
+    "zh": "我学习、做东西、写东西，也享受其中的乐趣。",
+    "en": "I learn stuff, build stuff, write stuff, and have fun along the way."
+  }
 }

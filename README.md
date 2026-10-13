@@ -19,6 +19,32 @@ npm run check
 npm run preview
 ```
 
+## 中文与英文版本
+
+页头的「中文 / EN」切换整页语言，包括导航、首页介绍、教育经历、博客标题与正文、分类、Thoughts 和论文介绍。**论文标题在两版中都保留正式英文原题**；作者署名、期刊名、DOI 和原始 PDF 共用，不翻译或复制论文文件。
+
+中文为默认版本，沿用 `/`、`/blog/`、`/thoughts/`、`/publications/` 等现有地址；英文版加 `/en/`，例如 `/en/blog/skill-development/`。切换保留当前文章、分类或分页，浏览器启用脚本时也保留查询参数与锚点。站内导航始终指向当前语言的页面。浏览器本地存储记住选择，再次从首页入口 `/` 进入时使用上次语言；直接打开文章或英文网址时以网址语言为准。不启用 JavaScript 或不允许本地存储时，仍可通过静态链接切换语言。
+
+双语内容在构建时写入 HTML，不依赖读者端翻译服务。每个页面都有对应的 `lang`、canonical、`hreflang` 与分享元数据，站点地图包含两个版本。
+
+- `src/locales.json`：双语界面文案和分类名称。新增分类时，需同时补齐中文和英文名称。
+- `src/site.json`：`description`、`intro`、`current` 分别维护 `zh` 和 `en`。
+- `content/blog/`、`content/thoughts/`、`content/publications/`：保留原稿及共用元数据，`lang` 标明原稿语言（`zh-CN` 或 `en`；论文默认英文，博客和 Thoughts 默认中文）。
+- `content/translations/{zh,en}/{blog,thoughts,publications}/{slug}.md`：对应语言的译文，slug 与原稿一致。原稿已是该语言时可直接使用；混合语言的原稿可以为两种语言各提供一份版本。
+
+译文只维护 `title`、`description` 和正文，不重复日期、分类、来源、发布状态、作者、DOI 等元数据。论文译文只维护 `description` 和正文，标题直接取自原稿。原稿没有标题或摘要的 Thoughts，译文也不需要 front matter。示例：
+
+```md
+---
+title: "English article title"
+description: "An English description."
+---
+
+The full translated article.
+```
+
+新增内容时同时准备另一种语言的全文，构建器发现缺少所需译文会报错。Thoughts 的 `status`、原始日期和顺序统一取自原稿；译文保留相同的 `<!-- more -->` 片段数量及链接卡片格式，不另建 thread。修改原稿时同步更新对应译文。原始中英双语的长期游戏文章按已有两份正文分别展示，原稿仍保留。
+
 ## GitHub Pages 部署
 
 1. 将代码提交并推送到 `master` 或 `main`。
@@ -33,9 +59,10 @@ npm run preview
 - `src/site.json`：姓名、邮箱、GitHub 链接、首页简介和站点域名。
 - `scripts/build.mjs`：页面结构、教育经历、研究兴趣和首页文案。
 - `src/style.css`：所有页面的视觉样式与移动端适配。
+- `src/locales.json`、`src/language.js`：双语界面文案、语言切换与偏好记忆。
 - `content/blog/*.md`：博客文章，文件名生成文章 URL。
 - `content/publications/*.md`：论文详情，文件名生成论文 URL。
-- `content/thoughts/*.md`：短想原稿，一份文件组织一组 thread，正文独立于网页存储。
+- `content/thoughts/*.md`：想法原稿，一份文件组织一组 thread，正文独立于网页存储。
 - `public/blog/`：博客图片。封面文件名必须与文章 slug 一致，例如 `content/blog/auto-research.md` 对应 `public/blog/auto-research.png`；构建时自动出现在列表卡片和文章页。文内配图也放在此目录，正文用 `/blog/filename` 引用。
 - `public/papers/`：论文 PDF。
 - `public/thoughts/`：Thoughts 的附图和链接卡片缩略图，正文使用 `/thoughts/文件名` 引用。
@@ -46,6 +73,7 @@ npm run preview
 ---
 title: Your article title
 date: 2026-09-26
+lang: en
 tag: AI 与 Agent
 category: ai-agents
 sample: false
@@ -92,15 +120,15 @@ A description of the work.
 
 ## 首页结构
 
-首页依次展示紧凑个人简介、论文列表、Recent writing 文章卡片和 Education 教育经历。教育经历仅保留硕士和本科信息。页面结构在 `scripts/build.mjs` 中维护；样式在 `src/style.css` 中维护。设计对比页与切换入口已移除。
+首页依次展示紧凑个人简介、论文列表、近期文章和教育经历；英文版对应 Recent writing 和 Education。教育经历仅保留硕士和本科信息。页面结构在 `scripts/build.mjs` 中维护；样式在 `src/style.css` 中维护。设计对比页与切换入口已移除。
 
 ## 博客分类
 
-文章 front matter 中的 `category` 是分类 URL 标识，`tag` 是显示名称。当前分类为 AI 与 Agent、职业思考、个人成长、知识管理。构建时自动生成分类入口和独立分类页；无需 JavaScript，支持直接访问、刷新和浏览器前进后退。新增分类时，在文章里填写新的 `category` 和 `tag` 即可。Substack 原始来源保存在文章元数据中，不在页面显示来源说明。
+文章 front matter 中的 `category` 是分类 URL 标识，`tag` 保留原稿的分类名称；两种语言的页面显示名称在 `src/locales.json` 中统一维护。当前中文分类为 AI 与智能体、职业思考、个人成长、知识管理。构建时自动生成双语分类入口和独立分类页；无需 JavaScript，支持直接访问、刷新和浏览器前进后退。新增分类时，在文章里填写新的 `category` 和 `tag`，并补齐双语分类文案。Substack 原始来源保存在文章元数据中，不在页面显示来源说明。
 
 ## Thoughts
 
-导航和页面标题为 Thoughts，地址为 `/thoughts/`。每组内容完整展开，按发布时间倒序，每页 20 组。页面沿用全站样式；多片段用细线连接，没有复制、分享或永久链接操作。首页结构保持不变。
+中文导航和页面标题为「想法」，地址为 `/thoughts/`；英文版为 Thoughts，地址为 `/en/thoughts/`。每组内容完整展开，按发布时间倒序，每页 20 组。页面沿用全站样式；多片段用细线连接，没有复制、分享或永久链接操作。首页结构保持不变。
 
 在 `content/thoughts/` 新建一份 Markdown，例如：
 

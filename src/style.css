@@ -60,3 +60,21 @@
  .thread-connected .thread-part::before{top:12px}
  .thread-connected .thread-part:not(:last-child)::after{top:22px}
 }
+
+/* Static language editions share a small, persistent control in the header. */
+.header-actions{display:flex;align-items:center;gap:28px;flex-shrink:0}
+.language-switch{display:inline-flex;align-items:center;padding:3px;border:1px solid var(--line);border-radius:5px;font-size:12px;line-height:1.5}
+.language-switch a{padding:6px 10px;border-radius:3px;white-space:nowrap}
+.language-switch a:hover{background:#ece8df}
+.language-switch a[aria-current]{background:var(--ink);color:var(--paper)}
+html[lang="zh-CN"]{--serif:Georgia,'Songti SC','Noto Serif CJK SC',SimSun,serif;--sans:Arial,'PingFang SC','Microsoft YaHei',sans-serif}
+html[lang="zh-CN"] .article-header h1{line-height:1.4;letter-spacing:0}
+html[lang="zh-CN"] .post-card h3,html[lang="zh-CN"] .paper-row h3{line-height:1.55;letter-spacing:0}
+@media(max-width:1100px){.header{gap:20px}.header nav{gap:22px}.header-actions{gap:18px}.header-contact{display:none}}
+@media(max-width:680px){
+ .header{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:16px 12px}
+ .header>.wordmark{grid-column:1;grid-row:1}
+ .header-actions{grid-column:2;grid-row:1}
+ .header nav{grid-column:1/-1;grid-row:2;gap:10px 24px}
+ .language-switch a{padding:7px 11px}
+}
