@@ -6,5 +6,5 @@ Bring something you have made when you reach out, because the scarcest signal is
 
 ```link-card
 url: "https://mp.weixin.qq.com/s/Ot-lSf2EkXbo1Sql619IhQ"
-title: "Related reading"
+title: "Who should you work with when you are young?"
 ```
