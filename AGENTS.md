@@ -32,7 +32,7 @@
 - front matter 的格式以 `README.md` 和现有文章为准。标题、摘要、日期和正文应相互一致；摘要说明文章的具体问题或观点。
 - Markdown 文件名决定文章 URL。修订已有文章时保留 slug 和原始发布日期；需要迁移 URL 时同步处理站内引用。
 - 封面放在 `public/blog/`，文件名与文章 slug 对应；正文图片也放在该目录，并使用 `/blog/文件名` 引用。其他站内链接同样使用 `/` 开头的路径，由构建器处理部署子路径。
-- 博客目前没有 Thoughts 的发布状态过滤：`content/blog/` 中的文章会进入正式构建，`sample` 仅改变展示标记。待发布文案不要依靠 `status: draft` 或 `sample` 隐藏。
+- 博客原稿使用 `status: draft` 或 `published` 控制中英文版本的发布状态；旧文章缺省视为 `published`。待发布或撤回的文章设为 `draft`，使用 `npm run dev:drafts` 预览；正式构建排除草稿，`sample` 仅改变展示标记。
 
 ## Thoughts 内容组织
 

@@ -1,6 +1,7 @@
 ---
 title: "一次寻找潜在用户的 1h Speedrun：我混淆了两种触达目标"
 date: "2026-10-14"
+status: "draft"
 lang: "zh-CN"
 tag: "个人成长"
 category: "personal-growth"

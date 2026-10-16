@@ -14,10 +14,15 @@ const read = type => fs.readdirSync(`content/${type}`).filter(f => f.endsWith('.
   const { data, content } = matter(fs.readFileSync(`content/${type}/${f}`, 'utf8'));
   return { ...data, content, slug: f.replace(/\.md$/, ''), type };
 });
-const sourcePosts = read('blog').sort((a, b) => new Date(b.date) - new Date(a.date));
 const sourcePapers = read('publications').sort((a, b) => a.order - b.order);
 const previewDrafts = process.env.PREVIEW_DRAFTS === '1';
 const output = previewDrafts ? 'dist-drafts' : 'dist';
+const sourcePosts = read('blog').filter(p => {
+  const status = p.status ?? 'published';
+  if (!['draft', 'published'].includes(status)) throw new Error(`Blog ${p.slug}: status must be draft or published`);
+  return status === 'published' || previewDrafts;
+}).sort((a, b) => new Date(b.date) - new Date(a.date));
+const draftPostRoutes = new Set(sourcePosts.filter(p => p.status === 'draft').map(p => `/blog/${p.slug}/`));
 const segments = content => content.trim().split(/^\s*<!-- more -->\s*$/m).map(p => p.trim());
 const sourceThreads = read('thoughts').filter(t => {
   if (!['draft', 'published'].includes(t.status)) throw new Error(`Thread ${t.slug}: status must be draft or published`);
@@ -143,7 +148,7 @@ for (const { locale, posts, papers, threads } of editions) {
     const art = cover
       ? `<div class="post-art"><img src="${url(cover)}" alt=""><span class="art-arrow">↗</span></div>`
       : `<div class="post-art art-${i % 2}" aria-hidden="true">${i % 2 ? '<div class="orbit one"></div><div class="orbit two"></div><div class="orbit three"></div><span class="orbit-center"></span>' : '<div class="balance"><i></i><i></i><i></i><i></i><i></i></div>'}<span class="art-arrow">↗</span></div>`;
-    return `<a class="post-card" href="${pageUrl(`/blog/${p.slug}/`)}">${art}<div class="meta">${esc(t.categories[p.category])} <span>· ${p.sample ? t.sample : date(p.date)}</span></div><h3>${esc(p.title)}</h3><p>${esc(p.description)}</p><span class="read-link">${t.readNote} ${arrow}</span></a>`;
+    return `<a class="post-card" href="${pageUrl(`/blog/${p.slug}/`)}">${art}<div class="meta">${esc(t.categories[p.category])} <span>· ${p.sample ? t.sample : date(p.date)}</span>${p.status === 'draft' ? `<span class="thread-draft">${t.draft}</span>` : ''}</div><h3>${esc(p.title)}</h3><p>${esc(p.description)}</p><span class="read-link">${t.readNote} ${arrow}</span></a>`;
   }
   function blogPage(active = '') {
     const entries = active ? posts.filter(p => p.category === active) : posts;
@@ -180,7 +185,7 @@ for (const { locale, posts, papers, threads } of editions) {
     const minutes = Math.max(1, Math.ceil((p.content.replace(/<[^>]*>/g, '').match(/[\u4e00-\u9fff]|[a-zA-Z]+/g) || []).length / 300));
     const metadata = paper
       ? `<p class="authors">${esc(p.authors)}</p><div class="publication-meta"><span>${esc(p.venue)}</span><span class="status ${p.status === 'Under review' ? 'muted' : ''}">${status(p)}</span></div><div class="paper-actions"><a class="button" href="${url(p.pdf)}" target="_blank" rel="noopener">${t.readPaper} ${arrow}</a>${p.doi ? `<a class="text-link" href="${esc(p.doi)}">${t.publishedVersion} ${arrow}</a>` : ''}</div>`
-      : `<p class="article-meta">${date(p.date)} · ${minutes} ${t.minutes}</p>`;
+      : `<p class="article-meta">${date(p.date)} · ${minutes} ${t.minutes}${p.status === 'draft' ? ` · <span class="thread-draft">${t.draft}</span>` : ''}</p>`;
     write(route, layout(p.title, paper ? 'publications' : 'blog', `<article class="article"><a class="back-link" href="${pageUrl(`/${p.type}/`)}">${paper ? t.allPapers : t.allNotes}</a><header class="article-header"><h1>${esc(p.title)}</h1>${metadata}</header>${coverHtml}<div class="prose">${markdown(p.content, locale)}</div><div class="article-end"><span>${t.continue}</span>${related.slice(0, 1).map(r => link(`/${r.type}/${r.slug}/`, `${esc(r.title)} ${arrow}`)).join('')}</div></article>`, route, p.description, cover), locale);
   }
   const indexHero = `<section class="index-hero"><div><h1>${name}</h1><dl class="contact-details"><div><dt>${t.email}:</dt><dd><a href="mailto:${esc(site.email)}">${esc(site.email)}</a></dd></div><div><dt>GitHub:</dt><dd><a href="${esc(site.github)}">${esc(site.github.replace(/^https?:\/\//, ''))}</a></dd></div><div><dt>Substack:</dt><dd><a href="https://barytes.substack.com">barytes.substack.com</a></dd></div></dl></div><div class="index-description"><p>${esc(site.intro[locale])} ${esc(site.current[locale])}</p></div></section>`;
@@ -192,6 +197,6 @@ for (const { locale, posts, papers, threads } of editions) {
 }
 fs.writeFileSync(`${output}/.nojekyll`, '');
 fs.writeFileSync(`${output}/robots.txt`, previewDrafts ? 'User-agent: *\nDisallow: /\n' : `User-agent: *\nAllow: /\nSitemap: ${site.url}${base}/sitemap.xml\n`);
-const sitemapEntries = paths.filter(({ route }) => route !== '/404.html' && !(previewDrafts && route.startsWith('/thoughts/'))).map(({ route, locale }) => `<url><loc>${site.url}${url(localeRoute(route, locale))}</loc>${Object.entries(locales).map(([key, value]) => `<xhtml:link rel="alternate" hreflang="${value.htmlLang}" href="${site.url}${url(localeRoute(route, key))}"/>`).join('')}</url>`).join('');
+const sitemapEntries = paths.filter(({ route }) => route !== '/404.html' && !draftPostRoutes.has(route) && !(previewDrafts && route.startsWith('/thoughts/'))).map(({ route, locale }) => `<url><loc>${site.url}${url(localeRoute(route, locale))}</loc>${Object.entries(locales).map(([key, value]) => `<xhtml:link rel="alternate" hreflang="${value.htmlLang}" href="${site.url}${url(localeRoute(route, key))}"/>`).join('')}</url>`).join('');
 fs.writeFileSync(`${output}/sitemap.xml`, `<?xml version="1.0" encoding="UTF-8"?><urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">${sitemapEntries}</urlset>`);
 console.log(`Built ${paths.length} pages in Chinese and English → ${output}/ (base: ${base || '/'})`);

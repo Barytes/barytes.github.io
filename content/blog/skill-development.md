@@ -3,6 +3,7 @@ title: "我怎样把一个面试准备 Skill 拆成六个 Skills"
 date: "2026-10-10"
 tag: "AI 与 Agent"
 category: "ai-agents"
+status: "draft"
 lang: "zh-CN"
 description: "从真实试用中的教学跑偏，到拆分职责、共用学习记录、保存反馈和 trace：一次还在继续的 Skill 开发记录。"
 ---

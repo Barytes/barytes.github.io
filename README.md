@@ -73,6 +73,7 @@ The full translated article.
 ---
 title: Your article title
 date: 2026-09-26
+status: draft
 lang: en
 tag: AI 与 Agent
 category: ai-agents
@@ -86,6 +87,10 @@ Write your article in Markdown.
 ```
 
 封面放到 `public/blog/{slug}.png`，文件名与 Markdown 的 slug 一致。文内配图也放进 `public/blog/`，用 `/blog/filename` 引用。
+
+博客的 `status` 使用 `draft` 或 `published`；旧文章未填写时按 `published` 处理。撤回文章时将原稿设为 `draft`，中英文版本一起从正式首页、博客列表、分类、文章页及站点地图中移除，正文、译文、原始日期和封面继续保留。`sample` 仅改变展示标记，不控制发布。
+
+运行 `npm run dev:drafts` 后打开 `/blog/` 或 `/en/blog/` 可预览博客草稿；列表和文章页显示草稿标记，预览输出到 `dist-drafts/`，页面设置 `noindex`，草稿文章不进入站点地图。正式部署仍只上传 `dist/`。明确授权重新发布后，将原稿的 `status` 改为 `published`。
 
 新增论文：
 
