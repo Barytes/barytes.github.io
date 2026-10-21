@@ -13,6 +13,10 @@ npm run dev
 
 打开 http://127.0.0.1:4321 。修改内容后自动重新构建，刷新浏览器即可。
 
+首页书房场景与网站一起构建。使用 `npm run dev` 预览，`npm run build` 生成的 `dist/` 包含场景及其全部资源。中英文首页都只显示场景，不附加标题、说明或按钮；可直接点击物件和拖动视角。场景源文件位于 `public/desk-scene/`，Three.js、专辑封面和许可说明随站点本地加载，支持 `BASE_PATH` 子路径。
+
+The study scene is part of the normal site build. Use `npm run dev` to preview it; `npm run build` includes the scene and its assets in `dist/`. Both homepages show only the scene, with direct object interactions and dragging. The source is maintained in `public/desk-scene/`. Three.js, album covers and attribution files are served locally, including under `BASE_PATH`.
+
 ```sh
 npm run build
 npm run check
@@ -125,7 +129,7 @@ A description of the work.
 
 ## 首页结构
 
-首页依次展示紧凑个人简介、论文列表、近期文章和教育经历；英文版对应 Recent writing 和 Education。教育经历仅保留硕士和本科信息。页面结构在 `scripts/build.mjs` 中维护；样式在 `src/style.css` 中维护。设计对比页与切换入口已移除。
+首页开头以两栏展示个人简介和互动书房，窄屏上场景排列在简介下方；随后展示论文列表、近期文章和教育经历；英文版对应 Recent writing 和 Education。教育经历仅保留硕士和本科信息。页面结构在 `scripts/build.mjs` 中维护；样式在 `src/style.css` 中维护。设计对比页与切换入口已移除。
 
 ## 博客分类
 

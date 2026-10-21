@@ -67,6 +67,23 @@
 .language-switch a{padding:6px 10px;border-radius:3px;white-space:nowrap}
 .language-switch a:hover{background:#ece8df}
 .language-switch a[aria-current]{background:var(--ink);color:var(--paper)}
+/* A quiet interactive illustration beside the introduction. */
+.index-hero.has-scene{grid-template-columns:minmax(0,1fr) 460px;gap:56px;align-items:center;padding:32px 0}
+.index-profile .index-description{margin-top:28px;max-width:600px}
+.home-desk-scene{position:relative;width:460px;height:394px;justify-self:end;cursor:grab;touch-action:pan-y}
+.home-desk-scene canvas{position:absolute;inset:0;width:100%;height:100%;display:block}
+.home-desk-scene.is-held{cursor:grabbing}
+.home-desk-scene.is-interactive{cursor:pointer}
+.home-desk-scene:focus-visible{outline:1px solid var(--accent);outline-offset:5px;border-radius:4px}
+@media(max-width:1100px) and (min-width:681px){
+ .index-hero.has-scene{grid-template-columns:minmax(0,1fr) 370px;gap:32px}
+ .index-hero.has-scene .home-desk-scene{width:370px;height:318px}
+}
+@media(max-width:680px){
+ .index-hero.has-scene{grid-template-columns:minmax(0,1fr);gap:16px;padding:37px 0 22px}
+ .home-desk-scene{width:min(340px,100%);height:auto;aspect-ratio:7/6;justify-self:center}
+}
+@media print{.home-desk-scene{display:none}}
 html[lang="zh-CN"]{--serif:Georgia,'Songti SC','Noto Serif CJK SC',SimSun,serif;--sans:Arial,'PingFang SC','Microsoft YaHei',sans-serif}
 html[lang="zh-CN"] .article-header h1{line-height:1.4;letter-spacing:0}
 html[lang="zh-CN"] .post-card h3,html[lang="zh-CN"] .paper-row h3{line-height:1.55;letter-spacing:0}
