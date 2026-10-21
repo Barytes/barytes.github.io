@@ -1,6 +1,7 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import matter from 'gray-matter';
+import { createHash } from 'node:crypto';
 
 const previewDrafts = process.env.PREVIEW_DRAFTS === '1';
 const root = path.resolve(previewDrafts ? 'dist-drafts' : 'dist');
@@ -9,6 +10,11 @@ const site = JSON.parse(fs.readFileSync('src/site.json', 'utf8'));
 const sitemap = fs.readFileSync(path.join(root, 'sitemap.xml'), 'utf8');
 let count = 0;
 const failures = [];
+// Updated HTML must not reuse a cached stylesheet or scene from an older release.
+const versionedAssets = ['style.css', 'desk-scene/scene.js'].map(asset => ({
+  asset,
+  version: createHash('sha256').update(fs.readFileSync(path.join(root, asset))).digest('hex').slice(0, 12),
+}));
 const draftPostRoutes = new Set(fs.readdirSync('content/blog').filter(f => f.endsWith('.md') && matter(fs.readFileSync(`content/blog/${f}`, 'utf8')).data.status === 'draft').map(f => `/blog/${f.slice(0, -3)}/`));
 for (const route of draftPostRoutes) {
   for (const prefix of ['', '/en']) {
@@ -28,6 +34,10 @@ function walk(dir) {
     if (!f.endsWith('.html')) continue;
     count++;
     const html = fs.readFileSync(file, 'utf8');
+    for (const { asset, version } of versionedAssets) {
+      if (asset === 'desk-scene/scene.js' && !html.includes('data-desk-scene')) continue;
+      if (!html.includes(`"${base}/${asset}?v=${version}"`)) failures.push(`${file}: missing current asset version for ${asset}`);
+    }
     for (const match of html.matchAll(/(?:href|src)="([^"#]+)(?:#[^"]*)?"/g)) {
       let target = match[1].split('?')[0];
       if (/^(https?:|mailto:|data:)/.test(target)) continue;
