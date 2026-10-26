@@ -62,36 +62,59 @@
 }
 
 /* Static language editions share a small, persistent control in the header. */
+.header nav a{white-space:nowrap}
 .header-actions{display:flex;align-items:center;gap:28px;flex-shrink:0}
 .language-switch{display:inline-flex;align-items:center;padding:3px;border:1px solid var(--line);border-radius:5px;font-size:12px;line-height:1.5}
 .language-switch a{padding:6px 10px;border-radius:3px;white-space:nowrap}
 .language-switch a:hover{background:#ece8df}
 .language-switch a[aria-current]{background:var(--ink);color:var(--paper)}
-/* A quiet interactive illustration beside the introduction. */
-.index-hero.has-scene{grid-template-columns:minmax(0,1fr) 460px;gap:56px;align-items:center;padding:32px 0}
-.index-profile .index-description{margin-top:28px;max-width:600px}
-.home-desk-scene{position:relative;width:460px;height:394px;justify-self:end;cursor:grab;touch-action:pan-y}
-.home-desk-scene canvas{position:absolute;inset:0;width:100%;height:100%;display:block}
-.home-desk-scene.is-held{cursor:grabbing}
-.home-desk-scene.is-interactive{cursor:pointer}
-.home-desk-scene:focus-visible{outline:1px solid var(--accent);outline-offset:5px;border-radius:4px}
-@media(max-width:1100px) and (min-width:681px){
- .index-hero.has-scene{grid-template-columns:minmax(0,1fr) 370px;gap:32px}
- .index-hero.has-scene .home-desk-scene{width:370px;height:318px}
-}
-@media(max-width:680px){
- .index-hero.has-scene{grid-template-columns:minmax(0,1fr);gap:16px;padding:37px 0 22px}
- .home-desk-scene{width:min(340px,100%);height:auto;aspect-ratio:7/6;justify-self:center}
-}
-@media print{.home-desk-scene{display:none}}
+/* Life puts writing first, with a small interactive study below the articles. */
+.life-post-list{border-top:1px solid var(--line)}
+.life-post{display:grid;grid-template-columns:minmax(0,1fr) 24px;gap:24px;padding:30px 0;border-bottom:1px solid var(--line)}
+.life-post h2{font:30px/1.5 var(--serif);margin:10px 0;overflow-wrap:anywhere}
+.life-post p{font-size:14px;color:var(--muted);max-width:760px;overflow-wrap:anywhere}
+.life-empty{padding:36px 0 52px;color:var(--muted);font-size:15px}
+.life-scene{padding:28px 0 36px}
+.life-desk-scene{position:relative;width:min(280px,100%);aspect-ratio:7/6;margin:0 0 0 auto;cursor:grab;touch-action:pan-y}
+.life-desk-scene canvas{position:absolute;inset:0;width:100%;height:100%;display:block}
+.life-desk-scene.is-held{cursor:grabbing}
+.life-desk-scene.is-interactive{cursor:pointer}
+.life-desk-scene:focus-visible{outline:1px solid var(--accent);outline-offset:5px;border-radius:4px}
+@media(max-width:680px){.life-scene{padding:20px 0 28px}.life-post{gap:16px;padding:24px 0}.life-post h2{font-size:24px}.life-desk-scene{width:min(240px,100%)}}
+@media print{.life-desk-scene{display:none}}
 html[lang="zh-CN"]{--serif:Georgia,'Songti SC','Noto Serif CJK SC',SimSun,serif;--sans:Arial,'PingFang SC','Microsoft YaHei',sans-serif}
 html[lang="zh-CN"] .article-header h1{line-height:1.4;letter-spacing:0}
 html[lang="zh-CN"] .post-card h3,html[lang="zh-CN"] .paper-row h3{line-height:1.55;letter-spacing:0}
 @media(max-width:1100px){.header{gap:20px}.header nav{gap:22px}.header-actions{gap:18px}.header-contact{display:none}}
-@media(max-width:680px){
+@media(max-width:900px){
  .header{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:16px 12px}
  .header>.wordmark{grid-column:1;grid-row:1}
  .header-actions{grid-column:2;grid-row:1}
- .header nav{grid-column:1/-1;grid-row:2;gap:10px 24px}
+ .header{height:auto;padding:22px 0}
+ .header nav{grid-column:1/-1;grid-row:2;flex-wrap:wrap;gap:10px 24px}
  .language-switch a{padding:7px 11px}
+}
+@media(max-width:680px){.header nav{column-gap:16px}}
+
+/* Daily Log: article previews grouped into weeks, with full reading pages. */
+.daily-log-list{max-width:900px;border-top:1px solid var(--line);padding-bottom:80px;min-height:360px}
+.daily-log-week-heading{font:13px/1.6 var(--sans);font-variant-numeric:tabular-nums;color:var(--muted);padding:24px 0;border-bottom:1px solid var(--line)}
+.daily-log-week+.daily-log-week{margin-top:32px}
+.daily-log-card{display:block;padding:32px 0;border-bottom:1px solid var(--line)}
+.daily-log-card h3{font:30px/1.5 var(--serif);margin:0 0 14px;overflow-wrap:anywhere}
+.daily-log-card .meta:not(:empty){margin-bottom:10px}
+.daily-log-card p{max-width:700px;font-size:15px;line-height:1.9;color:var(--muted);overflow-wrap:anywhere}
+.daily-log-read{display:inline-flex;gap:16px;margin-top:20px;font-size:12px;color:var(--accent)}
+.daily-log-article pre{white-space:pre-wrap;overflow-wrap:anywhere;line-height:1.8}
+.daily-log-metadata{display:flex;align-items:center;flex-wrap:wrap;gap:12px}
+.daily-log-navigation{max-width:700px;margin:48px auto 0;border-top:1px solid var(--line)}
+.daily-log-navigation .text-link{line-height:1.6}
+@media(max-width:680px){
+ .daily-log-list{padding-bottom:48px;min-height:300px}
+ .daily-log-week-heading{padding:20px 0;font-size:12px}
+ .daily-log-week+.daily-log-week{margin-top:20px}
+ .daily-log-card{padding:26px 0}
+ .daily-log-card h3{font-size:26px}
+ .daily-log-navigation{align-items:flex-start;gap:16px}
+ .daily-log-navigation .text-link{font-size:12px}
 }

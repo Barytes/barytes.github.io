@@ -1,0 +1,47 @@
+{
+  "format_version": 1,
+  "publication_url": "https://barytes.substack.com",
+  "articles": {
+    "skill-development:zh": {
+      "slug": "skill-development",
+      "language": "zh",
+      "status": "draft",
+      "source_hash": "87365cb9055fcf351e78bdbcb78472bda305004cbeeabff2bef2c21f6bf1cd2e",
+      "synced_hash": "87365cb9055fcf351e78bdbcb78472bda305004cbeeabff2bef2c21f6bf1cd2e",
+      "draft_id": 220302313,
+      "editor_url": "https://barytes.substack.com/publish/post/220302313",
+      "transport": "browser",
+      "browser_content_sha256": "5a3d76c1bec0e2d2088a40f689104296bb1cfd34aae35b9d8588dcabe2877671",
+      "verified_at": "2026-10-14T03:50:25.989Z",
+      "visual_check": {
+        "desktop": true,
+        "mobile": true,
+        "desktop_preview_width": 1200,
+        "mobile_preview_width": 375
+      },
+      "preview_audience": "free_subscriber_view",
+      "draft_audience_observed": "everyone"
+    },
+    "skill-development:en": {
+      "slug": "skill-development",
+      "language": "en",
+      "status": "draft",
+      "source_hash": "577f25601845e728f3b7a7edc8bfd29e9048181eb45f0707a7071f07d2d619eb",
+      "synced_hash": "577f25601845e728f3b7a7edc8bfd29e9048181eb45f0707a7071f07d2d619eb",
+      "draft_id": 220303759,
+      "editor_url": "https://barytes.substack.com/publish/post/220303759",
+      "transport": "browser",
+      "browser_content_sha256": "a825965f005887d057f7eb7c857f521f283e2b014001e302055fffedc42dc614",
+      "verified_at": "2026-10-14T03:50:25.989Z",
+      "visual_check": {
+        "desktop": true,
+        "mobile": true,
+        "desktop_preview_width": 1200,
+        "mobile_preview_width": 375
+      },
+      "preview_audience": "free_subscriber_view",
+      "draft_audience_observed": "everyone"
+    }
+  },
+  "assets": {}
+}

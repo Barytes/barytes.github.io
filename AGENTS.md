@@ -34,6 +34,10 @@
 - 封面放在 `public/blog/`，文件名与文章 slug 对应；正文图片也放在该目录，并使用 `/blog/文件名` 引用。其他站内链接同样使用 `/` 开头的路径，由构建器处理部署子路径。
 - 博客原稿使用 `status: draft` 或 `published` 控制中英文版本的发布状态；旧文章缺省视为 `published`。待发布或撤回的文章设为 `draft`，使用 `npm run dev:drafts` 预览；正式构建排除草稿，`sample` 仅改变展示标记。
 
+## Substack 同步（已暂停）
+
+- 保留 [substack-sync](skills/substack-sync/SKILL.md) Skill，当前仅在用户明确要求同步 Substack 时读取并执行；日常新增、修改博客或补发旧文只维护网站内容。
+
 ## Thoughts 内容组织
 
 新增 Thoughts 时，先浏览 `content/thoughts/` 中已有的想法与 threads，并完整阅读主题相关的内容，再向用户提出组织建议：

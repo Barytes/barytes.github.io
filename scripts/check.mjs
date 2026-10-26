@@ -16,7 +16,9 @@ const versionedAssets = ['style.css', 'desk-scene/scene.js'].map(asset => ({
   version: createHash('sha256').update(fs.readFileSync(path.join(root, asset))).digest('hex').slice(0, 12),
 }));
 const draftPostRoutes = new Set(fs.readdirSync('content/blog').filter(f => f.endsWith('.md') && matter(fs.readFileSync(`content/blog/${f}`, 'utf8')).data.status === 'draft').map(f => `/blog/${f.slice(0, -3)}/`));
-for (const route of draftPostRoutes) {
+const draftLifeRoutes = new Set(fs.readdirSync('content/life').filter(f => f.endsWith('.md') && (matter(fs.readFileSync(`content/life/${f}`, 'utf8')).data.status ?? 'draft') === 'draft').map(f => `/life/${f.slice(0, -3)}/`));
+const draftLogRoutes = new Set(fs.readdirSync('content/daily-log').filter(f => f.endsWith('.md') && matter(fs.readFileSync(`content/daily-log/${f}`, 'utf8')).data.status === 'draft').map(f => `/daily-log/${f.slice(0, -3)}/`));
+for (const route of [...draftPostRoutes, ...draftLifeRoutes, ...draftLogRoutes]) {
   for (const prefix of ['', '/en']) {
     const target = path.join(root, prefix + route, 'index.html');
     if (fs.existsSync(target) !== previewDrafts) failures.push(`${target}: incorrect draft visibility`);
@@ -54,6 +56,11 @@ function walk(dir) {
     const route = relative.replace(/index\.html$/, '');
     const english = route.startsWith('/en/');
     const originalRoute = english ? route.slice(3) : route;
+    const navigation = html.match(/<header class="header">[\s\S]*?<nav\b[^>]*>([\s\S]*?)<\/nav>/)?.[1] || '';
+    const logNavigation = `<a href="${base}${english ? '/en' : ''}/daily-log/"${originalRoute.startsWith('/daily-log/') ? ' aria-current="page"' : ''}>${english ? 'Daily Log' : '日志'}</a>`;
+    if (!navigation.includes(logNavigation)) failures.push(`${file}: missing or incorrect Daily Log navigation`);
+    const lifeNavigation = `<a href="${base}${english ? '/en' : ''}/life/"${originalRoute.startsWith('/life/') ? ' aria-current="page"' : ''}>${english ? 'Life' : '生活'}</a>`;
+    if (!navigation.includes(lifeNavigation)) failures.push(`${file}: missing or incorrect Life navigation`);
     const canonical = `${site.url}${base}${route}`;
     if (!html.includes(`<html lang="${english ? 'en' : 'zh-CN'}"`)) failures.push(`${file}: wrong document language`);
     if (!html.includes(`<link rel="canonical" href="${canonical}">`)) failures.push(`${file}: wrong canonical URL`);
@@ -69,7 +76,7 @@ function walk(dir) {
       if ((target.endsWith('/') || target.endsWith('.html')) && target.startsWith('/en/') !== english) failures.push(`${file}: content link changes language (${match[1]})`);
     }
     const inSitemap = sitemap.includes(`<loc>${canonical}</loc>`);
-    const shouldIndex = originalRoute !== '/404.html' && !draftPostRoutes.has(originalRoute) && !(previewDrafts && originalRoute.startsWith('/thoughts/'));
+    const shouldIndex = originalRoute !== '/404.html' && !draftPostRoutes.has(originalRoute) && !draftLifeRoutes.has(originalRoute) && !draftLogRoutes.has(originalRoute) && !(previewDrafts && (originalRoute.startsWith('/thoughts/') || originalRoute.startsWith('/daily-log/')));
     if (inSitemap !== shouldIndex) failures.push(`${file}: incorrect sitemap inclusion`);
     if (previewDrafts && !html.includes('<meta name="robots" content="noindex, nofollow">')) failures.push(`${file}: draft preview must be noindex`);
   }

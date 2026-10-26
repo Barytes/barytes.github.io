@@ -13,9 +13,9 @@ npm run dev
 
 打开 http://127.0.0.1:4321 。修改内容后自动重新构建，刷新浏览器即可。
 
-首页书房场景与网站一起构建。使用 `npm run dev` 预览，`npm run build` 生成的 `dist/` 包含场景及其全部资源。中英文首页都只显示场景，不附加标题、说明或按钮；可直接点击物件和拖动视角。场景源文件位于 `public/desk-scene/`，Three.js、专辑封面和许可说明随站点本地加载，支持 `BASE_PATH` 子路径。
+「生活 / Life」分区位于 `/life/` 和 `/en/life/`，以生活文章列表为主，3D 书房作为小彩蛋放在列表下方靠右的位置。可直接点击物件、拖动视角，或用方向键和 Home 键控制视角。首页展示个人简介、论文、近期文章和教育经历，不加载 3D 场景。使用 `npm run dev` 预览，`npm run build` 生成的 `dist/` 包含场景及其全部资源。场景源文件仍位于 `public/desk-scene/`，Three.js、专辑封面和许可说明随站点本地加载，支持 `BASE_PATH` 子路径。
 
-The study scene is part of the normal site build. Use `npm run dev` to preview it; `npm run build` includes the scene and its assets in `dist/`. Both homepages show only the scene, with direct object interactions and dragging. The source is maintained in `public/desk-scene/`. Three.js, album covers and attribution files are served locally, including under `BASE_PATH`.
+The Life section at `/life/` and `/en/life/` puts articles first, with a small interactive 3D study at the bottom right below the list. Click objects, drag to look around, or use the arrow keys and Home to control the view. The homepage contains the profile, publications, recent writing, and education without loading the scene. Use `npm run dev` to preview it; `npm run build` includes the scene and its assets in `dist/`. Source remains in `public/desk-scene/`. Three.js, album covers and attribution files are served locally, including under `BASE_PATH`.
 
 ```sh
 npm run build
@@ -25,7 +25,7 @@ npm run preview
 
 ## 中文与英文版本
 
-页头的「中文 / EN」切换整页语言，包括导航、首页介绍、教育经历、博客标题与正文、分类、Thoughts 和论文介绍。**论文标题在两版中都保留正式英文原题**；作者署名、期刊名、DOI 和原始 PDF 共用，不翻译或复制论文文件。
+页头的「中文 / EN」切换整页语言，包括导航、首页介绍、教育经历、博客标题与正文、分类、Thoughts、Daily Log、生活 / Life 和论文介绍。**论文标题在两版中都保留正式英文原题**；作者署名、期刊名、DOI 和原始 PDF 共用，不翻译或复制论文文件。
 
 中文为默认版本，沿用 `/`、`/blog/`、`/thoughts/`、`/publications/` 等现有地址；英文版加 `/en/`，例如 `/en/blog/skill-development/`。切换保留当前文章、分类或分页，浏览器启用脚本时也保留查询参数与锚点。站内导航始终指向当前语言的页面。浏览器本地存储记住选择，再次从首页入口 `/` 进入时使用上次语言；直接打开文章或英文网址时以网址语言为准。不启用 JavaScript 或不允许本地存储时，仍可通过静态链接切换语言。
 
@@ -33,8 +33,8 @@ npm run preview
 
 - `src/locales.json`：双语界面文案和分类名称。新增分类时，需同时补齐中文和英文名称。
 - `src/site.json`：`description`、`intro`、`current` 分别维护 `zh` 和 `en`。
-- `content/blog/`、`content/thoughts/`、`content/publications/`：保留原稿及共用元数据，`lang` 标明原稿语言（`zh-CN` 或 `en`；论文默认英文，博客和 Thoughts 默认中文）。
-- `content/translations/{zh,en}/{blog,thoughts,publications}/{slug}.md`：对应语言的译文，slug 与原稿一致。原稿已是该语言时可直接使用；混合语言的原稿可以为两种语言各提供一份版本。
+- `content/blog/`、`content/life/`、`content/thoughts/`、`content/daily-log/`、`content/publications/`：保留原稿及共用元数据，`lang` 标明原稿语言（`zh-CN` 或 `en`；论文默认英文，其他内容默认中文）。
+- `content/translations/{zh,en}/{blog,life,thoughts,daily-log,publications}/{slug}.md`：对应语言的译文，slug 与原稿一致。原稿已是该语言时可直接使用；混合语言的原稿可以为两种语言各提供一份版本。
 
 译文只维护 `title`、`description` 和正文，不重复日期、分类、来源、发布状态、作者、DOI 等元数据。论文译文只维护 `description` 和正文，标题直接取自原稿。原稿没有标题或摘要的 Thoughts，译文也不需要 front matter。示例：
 
@@ -48,6 +48,10 @@ The full translated article.
 ```
 
 新增内容时同时准备另一种语言的全文，构建器发现缺少所需译文会报错。Thoughts 的 `status`、原始日期和顺序统一取自原稿；译文保留相同的 `<!-- more -->` 片段数量及链接卡片格式，不另建 thread。修改原稿时同步更新对应译文。原始中英双语的长期游戏文章按已有两份正文分别展示，原稿仍保留。
+
+## Substack 双语同步（已暂停）
+
+当前暂停日常文章的 Substack 同步，新增、修改博客或补发旧文只维护网站内容。保留仓库 [substack-sync Skill](skills/substack-sync/SKILL.md) 与现有同步资料，仅在用户明确要求同步 Substack 时使用。届时同时维护中文、英文两份对应稿件，默认同步为草稿，读者范围统一为 Everyone（免费）。Skill 说明已登录浏览器与 `conorbronsdon/substack-mcp` 两种通道，以及安装依赖、认证、转换表格与图片、查重和远端验证的方法。`substack/` 保存可接续的配置、稿件 ID 和验证基线；`.substack/` 保存本机凭据和临时产物并被 Git 忽略。公开发布、订阅邮件、提交和推送仍按当次用户授权执行。
 
 ## GitHub Pages 部署
 
@@ -65,9 +69,14 @@ The full translated article.
 - `src/style.css`：所有页面的视觉样式与移动端适配。
 - `src/locales.json`、`src/language.js`：双语界面文案、语言切换与偏好记忆。
 - `content/blog/*.md`：博客文章，文件名生成文章 URL。
+- `content/life/*.md`：生活文章，按日期倒序显示，文件名生成 `/life/{slug}/`。
 - `content/publications/*.md`：论文详情，文件名生成论文 URL。
 - `content/thoughts/*.md`：想法原稿，一份文件组织一组 thread，正文独立于网页存储。
+- `content/daily-log/YYYY-MM-DD.md`：每日研究日志原稿，一天一份，按日期倒序并自动按周分组。
+- `drafts/daily-log/`：每天的日志草稿，不参与网站构建，沿用 `drafts/` 的 Git 忽略规则。
+- `drafts/life/`：生活文章的原始草稿，不参与网站构建，沿用 `drafts/` 的 Git 忽略规则。
 - `public/blog/`：博客图片。封面文件名必须与文章 slug 一致，例如 `content/blog/auto-research.md` 对应 `public/blog/auto-research.png`；构建时自动出现在列表卡片和文章页。文内配图也放在此目录，正文用 `/blog/filename` 引用。
+- `public/life/`：生活文章图片。可选封面与文章 slug 同名，显示在文章页；正文图片用 `/life/文件名` 引用。
 - `public/papers/`：论文 PDF。
 - `public/thoughts/`：Thoughts 的附图和链接卡片缩略图，正文使用 `/thoughts/文件名` 引用。
 
@@ -129,11 +138,67 @@ A description of the work.
 
 ## 首页结构
 
-首页开头以两栏展示个人简介和互动书房，窄屏上场景排列在简介下方；随后展示论文列表、近期文章和教育经历；英文版对应 Recent writing 和 Education。教育经历仅保留硕士和本科信息。页面结构在 `scripts/build.mjs` 中维护；样式在 `src/style.css` 中维护。设计对比页与切换入口已移除。
+首页开头以两栏展示姓名、联系方式和个人简介；随后展示论文列表、近期文章和教育经历；英文版对应 Recent writing 和 Education。互动书房位于生活分区的文章列表下方。教育经历仅保留硕士和本科信息。页面结构在 `scripts/build.mjs` 中维护；样式在 `src/style.css` 中维护。设计对比页与切换入口已移除。
 
 ## 博客分类
 
 文章 front matter 中的 `category` 是分类 URL 标识，`tag` 保留原稿的分类名称；两种语言的页面显示名称在 `src/locales.json` 中统一维护。当前中文分类为 AI 与智能体、职业思考、个人成长、知识管理。构建时自动生成双语分类入口和独立分类页；无需 JavaScript，支持直接访问、刷新和浏览器前进后退。新增分类时，在文章里填写新的 `category` 和 `tag`，并补齐双语分类文案。Substack 原始来源保存在文章元数据中，不在页面显示来源说明。
+
+## 生活 / Life
+
+生活分区用于日常与兴趣相关的文章，列表按日期倒序显示标题、日期和可选摘要，点击进入全文。3D 书房缩小放在列表底部作为彩蛋，保留点击、拖动与键盘交互。
+
+原始草稿先放在 `drafts/life/{slug}.md`，直接写 Markdown 即可，不必先补齐元数据或译文。这个目录不参与正式构建或草稿预览，并沿用 `drafts/` 的 Git 忽略规则。准备在网站预览时，将文章移入 `content/life/`，补齐元数据和对应译文。
+
+`content/life/{slug}.md` 的文章格式示例：
+
+```md
+---
+title: "文章标题"
+date: "2026-10-26"
+lang: "zh-CN"
+status: "draft"
+description: "可选的文章摘要。"
+---
+
+用 Markdown 写正文。
+```
+
+标题、加引号的日期和正文为必填，摘要与封面可选。文件名决定文章地址 `/life/{slug}/`，英文版为 `/en/life/{slug}/`。英文全文放在 `content/translations/en/life/{slug}.md`；原稿为英文时提供对应的中文译文。译文维护标题、摘要和正文，日期与状态共用原稿。
+
+省略 `status` 时默认作为草稿；`draft` 只在 `npm run dev:drafts` 中显示，并标注「草稿 / Draft」，不进入站点地图。确认发布后设为 `published`，正式构建才会收录。图片放在 `public/life/`，正文使用 `/life/文件名` 引用；可选封面使用 `{slug}.png`、`.jpg`、`.jpeg` 或 `.webp`，自动显示在文章页。站内链接由构建器处理语言与部署子路径。
+
+Life supports articles about everyday life and personal interests, ordered newest first, with the small interactive study below the list. Start raw Markdown drafts in `drafts/life/`, which is Git-ignored and excluded from both builds and previews. Move articles into `content/life/` with metadata and full translations in `content/translations/{zh,en}/life/` when ready for a website preview; keep images in `public/life/`. Titles, quoted calendar dates and bodies are required; descriptions and covers are optional. Omitted `status` means `draft`; preview with `npm run dev:drafts` and set `published` after publication is approved. Each article has matching `/life/{slug}/` and `/en/life/{slug}/` pages.
+
+## 日志 / Daily Log
+
+中文导航和页面标题为「日志」，英文为 **Daily Log**，地址分别为 `/daily-log/` 和 `/en/daily-log/`。日志按周一到周日自动分组，周与每日条目均按日期倒序，以文章列表展示日期、摘要和阅读全文入口。摘要优先使用 `description`，未填写时从正文自动提取。每页显示最近 8 个有记录的周；较早记录通过静态分页访问。点击条目进入当天的独立文章页，阅读完整正文，便于分享给 collaborator 或 mentor。
+
+每天的原始草稿先放在 `drafts/daily-log/YYYY-MM-DD.md`，可以直接写 Markdown，不必先补齐元数据或译文。这个目录不参与正式构建或草稿预览，并沿用 `drafts/` 的 Git 忽略规则。
+
+准备在网站展示时，将当天记录移到 `content/daily-log/YYYY-MM-DD.md`，补齐元数据和对应译文。日期按北京时间填写，必须加引号并与文件名一致。默认按公开日志处理（省略 `status` 时视为 `published`）；标题、摘要和封面均不必填写。正文自由使用 Markdown，下面是内容结构示例，按当天实际工作填写：
+
+```md
+---
+date: "2026-10-26"
+lang: "zh-CN"
+status: "published"
+---
+
+## 今天的问题
+
+## 做了什么、得到什么
+
+## 当前判断与卡点
+
+## 下一步
+```
+
+英文全文放在 `content/translations/en/daily-log/2026-10-26.md`；如果原稿是英文，则补充对应的中文译文。无标题、摘要时，译文直接写正文，不需要 front matter。原稿可选 `title` 和 `description`，使用时需在译文中同步提供；日期和状态始终取自原稿。正文中的站内链接使用 `/` 开头的路径，构建器自动处理语言和部署子路径。当天独立页面地址为 `/daily-log/2026-10-26/`，英文版为 `/en/daily-log/2026-10-26/`。
+
+需要暂存时可以显式设为 `status: "draft"`，用 `npm run dev:drafts` 查看。正式构建不生成该条目的详情页，也不在列表或站点地图中收录；预览显示草稿标记并设置 `noindex`，预览版的 Daily Log 页面均不进入站点地图。`draft` 控制网站展示，不为公开 GitHub 仓库中的原稿提供隐私保护。
+
+Daily Log is a public research notebook with one Markdown file per working day. Start raw drafts in `drafts/daily-log/`, which is Git-ignored and excluded from both builds and previews. Move entries into `content/daily-log/` with metadata and translations when ready for the website. Entries are grouped into Monday–Sunday weeks, newest first, with eight active weeks per page. The article list shows dates and descriptions (or automatic body excerpts); each entry opens a shareable article page with the full text. Keep the complete Chinese and English editions together; titles, descriptions, and covers are optional. Omitted `status` means `published`; an explicit `draft` is only included in local draft previews. Add entries from actual work, and use the existing build/check and publication workflow.
 
 ## Thoughts
 

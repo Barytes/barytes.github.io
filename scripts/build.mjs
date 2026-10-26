@@ -23,6 +23,18 @@ const sourcePosts = read('blog').filter(p => {
   return status === 'published' || previewDrafts;
 }).sort((a, b) => new Date(b.date) - new Date(a.date));
 const draftPostRoutes = new Set(sourcePosts.filter(p => p.status === 'draft').map(p => `/blog/${p.slug}/`));
+const sourceLifePosts = read('life').map(p => {
+  const status = p.status ?? 'draft';
+  if (!['draft', 'published'].includes(status)) throw new Error(`Life ${p.slug}: status must be draft or published`);
+  if (typeof p.title !== 'string' || !p.title.trim()) throw new Error(`Life ${p.slug}: title is required`);
+  if (typeof p.date !== 'string' || !/^\d{4}-\d{2}-\d{2}$/.test(p.date) || !Number.isFinite(Date.parse(p.date)) || new Date(p.date).toISOString().slice(0, 10) !== p.date) {
+    throw new Error(`Life ${p.slug}: date must be a quoted YYYY-MM-DD calendar date`);
+  }
+  if (!p.content.trim()) throw new Error(`Life ${p.slug}: body is required`);
+  return { ...p, status };
+}).filter(p => p.status === 'published' || previewDrafts)
+  .sort((a, b) => b.date.localeCompare(a.date) || a.slug.localeCompare(b.slug));
+const draftLifeRoutes = new Set(sourceLifePosts.filter(p => p.status === 'draft').map(p => `/life/${p.slug}/`));
 const segments = content => content.trim().split(/^\s*<!-- more -->\s*$/m).map(p => p.trim());
 const sourceThreads = read('thoughts').filter(t => {
   if (!['draft', 'published'].includes(t.status)) throw new Error(`Thread ${t.slug}: status must be draft or published`);
@@ -34,6 +46,33 @@ const sourceThreads = read('thoughts').filter(t => {
   if (segments(t.content).some(p => !p)) throw new Error(`Thread ${t.slug}: each segment needs content`);
   return t;
 }).sort((a, b) => Date.parse(b.date) - Date.parse(a.date) || a.slug.localeCompare(b.slug));
+const sourceLogs = read('daily-log').map(entry => {
+  const status = entry.status ?? 'published';
+  if (!['draft', 'published'].includes(status)) throw new Error(`Daily Log ${entry.slug}: status must be draft or published`);
+  if (typeof entry.date !== 'string' || !/^\d{4}-\d{2}-\d{2}$/.test(entry.date) || !Number.isFinite(Date.parse(entry.date)) || new Date(entry.date).toISOString().slice(0, 10) !== entry.date) {
+    throw new Error(`Daily Log ${entry.slug}: date must be a quoted YYYY-MM-DD calendar date`);
+  }
+  if (entry.slug !== entry.date) throw new Error(`Daily Log ${entry.slug}: filename must match the date`);
+  if (!entry.content.trim()) throw new Error(`Daily Log ${entry.slug}: body is required`);
+  return { ...entry, status };
+}).filter(entry => entry.status === 'published' || previewDrafts)
+  .sort((a, b) => b.date.localeCompare(a.date));
+const draftLogRoutes = new Set(sourceLogs.filter(entry => entry.status === 'draft').map(entry => `/daily-log/${entry.slug}/`));
+const logWeek = date => {
+  const monday = new Date(`${date}T00:00:00Z`);
+  monday.setUTCDate(monday.getUTCDate() - (monday.getUTCDay() + 6) % 7);
+  return monday.toISOString().slice(0, 10);
+};
+const logWeeks = [...new Set(sourceLogs.map(entry => logWeek(entry.date)))];
+const logWeeksPerPage = 8;
+const logPageCount = Math.max(1, Math.ceil(logWeeks.length / logWeeksPerPage));
+const logRoute = page => page === 1 ? '/daily-log/' : `/daily-log/page/${page}/`;
+const logDate = date => date.replaceAll('-', '.');
+const logWeekRange = start => {
+  const end = new Date(`${start}T00:00:00Z`);
+  end.setUTCDate(end.getUTCDate() + 6);
+  return `${logDate(start)} – ${logDate(end.toISOString().slice(0, 10))}`;
+};
 
 // Originals own dates, publication state, URLs and citation metadata. A language
 // counterpart translates prose; official paper titles stay in English.
@@ -66,10 +105,11 @@ const threadPageCount = Math.max(1, Math.ceil(sourceThreads.length / threadPageS
 const threadRoute = page => page === 1 ? '/thoughts/' : `/thoughts/page/${page}/`;
 const categories = [...new Set(sourcePosts.map(p => p.category))];
 const pageRoutes = new Set([
-  '/', '/blog/', '/publications/', '/404.html',
+  '/', '/blog/', '/publications/', '/life/', '/404.html',
   ...categories.map(key => `/blog/category/${key}/`),
   ...Array.from({ length: threadPageCount }, (_, i) => threadRoute(i + 1)),
-  ...[...sourcePosts, ...sourcePapers].map(p => `/${p.type}/${p.slug}/`),
+  ...Array.from({ length: logPageCount }, (_, i) => logRoute(i + 1)),
+  ...[...sourcePosts, ...sourcePapers, ...sourceLogs, ...sourceLifePosts].map(p => `/${p.type}/${p.slug}/`),
 ]);
 function internalHref(href, locale) {
   const [route] = href.split(/[?#]/);
@@ -101,8 +141,8 @@ thoughtMarkdown.use({ renderer: {
   }
 } });
 const arrow = '<span aria-hidden="true">↗</span>';
-const coverOf = slug => {
-  const cover = ['.png', '.jpg', '.jpeg', '.webp'].map(ext => `/blog/${slug}${ext}`).find(p => fs.existsSync(`public${p}`));
+const coverOf = (slug, type = 'blog') => {
+  const cover = ['.png', '.jpg', '.jpeg', '.webp'].map(ext => `/${type}/${slug}${ext}`).find(p => fs.existsSync(`public${p}`));
   return cover ? `${cover}?v=${createHash('sha256').update(fs.readFileSync(`public${cover}`)).digest('hex').slice(0, 12)}` : '';
 };
 const threadDate = d => new Intl.DateTimeFormat('en-GB', { year: 'numeric', month: '2-digit', day: '2-digit', timeZone: 'Asia/Shanghai' }).format(new Date(d)).split('/').reverse().join('.');
@@ -120,6 +160,8 @@ const editions = Object.keys(locales).map(locale => ({
   posts: sourcePosts.map(p => translate(p, locale)),
   papers: sourcePapers.map(p => translate(p, locale)),
   threads: sourceThreads.map(t => translate(t, locale)),
+  logs: sourceLogs.map(entry => translate(entry, locale)),
+  lifePosts: sourceLifePosts.map(p => translate(p, locale)),
 }));
 fs.rmSync(output, { recursive: true, force: true });
 fs.mkdirSync(output);
@@ -128,7 +170,7 @@ for (const file of ['style.css', 'language.js']) fs.copyFileSync(`src/${file}`, 
 // Tie cached assets to their contents so new HTML always gets matching styles and scene code.
 const assetUrl = file => `${url(file)}?v=${createHash('sha256').update(fs.readFileSync(path.join(output, file))).digest('hex').slice(0, 12)}`;
 
-for (const { locale, posts, papers, threads } of editions) {
+for (const { locale, posts, papers, threads, logs, lifePosts } of editions) {
   const t = locales[locale];
   const name = locale === 'zh' ? site.chineseName : site.name;
   const pageUrl = route => url(localeRoute(route, locale));
@@ -136,11 +178,12 @@ for (const { locale, posts, papers, threads } of editions) {
   const date = d => new Date(d).toLocaleDateString(t.dateLocale, { month: 'long', day: 'numeric', year: 'numeric', timeZone: 'UTC' });
   const status = p => esc(t.statuses[p.status] || p.status);
   function layout(title, section, body, route = '/', description = site.description[locale], image = '') {
+    const isArticle = (section === 'blog' && route.startsWith('/blog/') && !route.includes('/category/') && route !== '/blog/') || (section === 'life' && route !== '/life/') || (section === 'dailyLog' && /^\/daily-log\/\d{4}-\d{2}-\d{2}\/$/.test(route));
     const canonical = `${site.url}${pageUrl(route)}`;
     const alternates = Object.entries(locales).map(([key, value]) => `<link rel="alternate" hreflang="${value.htmlLang}" href="${site.url}${url(localeRoute(route, key))}">`).join('');
     const switcher = `<div class="language-switch" role="group" aria-label="${t.language}">${[['zh', '中文'], ['en', 'EN']].map(([key, label]) => `<a href="${url(localeRoute(route, key))}" data-language="${key}" lang="${locales[key].htmlLang}" hreflang="${locales[key].htmlLang}" aria-label="${key === 'zh' ? '切换到中文' : 'Switch to English'}"${key === locale ? ' aria-current="true"' : ''}>${label}</a>`).join('')}</div>`;
-    const navigation = [['/', 'about'], ['/blog/', 'blog'], ['/thoughts/', 'thoughts'], ['/publications/', 'publications']].map(([p, key]) => `<a href="${pageUrl(p)}"${section === key ? ' aria-current="page"' : ''}>${t[key]}</a>`).join('');
-    return `<!doctype html><html lang="${t.htmlLang}" data-locale="${locale}" data-base="${esc(base)}"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="description" content="${esc(description)}">${previewDrafts ? '<meta name="robots" content="noindex, nofollow">' : ''}<meta name="theme-color" content="#f7f5ef"><title>${esc(title)}${title === name ? '' : ` — ${name}`}</title><link rel="canonical" href="${canonical}">${alternates}<link rel="alternate" hreflang="x-default" href="${site.url}${url(route)}"><meta property="og:title" content="${esc(title)}"><meta property="og:description" content="${esc(description)}"><meta property="og:type" content="${section === 'blog' && route.startsWith('/blog/') && !route.includes('/category/') && route !== '/blog/' ? 'article' : 'website'}"><meta property="og:url" content="${canonical}"><meta property="og:locale" content="${locale === 'zh' ? 'zh_CN' : 'en_US'}">${image ? `<meta property="og:image" content="${esc(site.url)}${url(image)}">` : ''}<link rel="icon" href="data:,"><link rel="stylesheet" href="${assetUrl('/style.css')}"><script src="${url('/language.js')}"></script></head><body><a class="skip" href="#main">${t.skip}</a><header class="header"><a class="wordmark" href="${pageUrl('/')}">${name}</a><nav aria-label="${t.navigation}">${navigation}</nav><div class="header-actions">${switcher}<a class="header-contact" href="mailto:${site.email}">${t.contact} ${arrow}</a></div></header><main id="main">${body}</main><footer><div class="footer-top"><a class="wordmark" href="${pageUrl('/')}">${name}</a><div><a href="mailto:${site.email}">${t.email} ${arrow}</a><a href="${site.github}">GitHub ${arrow}</a></div></div><div class="footer-bottom"><span>© ${new Date().getFullYear()} ${name}</span><a href="#main">${t.top}</a></div></footer></body></html>`;
+    const navigation = [['/', 'about'], ['/blog/', 'blog'], ['/thoughts/', 'thoughts'], ['/daily-log/', 'dailyLog'], ['/publications/', 'publications'], ['/life/', 'life']].map(([p, key]) => `<a href="${pageUrl(p)}"${section === key ? ' aria-current="page"' : ''}>${t[key]}</a>`).join('');
+    return `<!doctype html><html lang="${t.htmlLang}" data-locale="${locale}" data-base="${esc(base)}"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="description" content="${esc(description)}">${previewDrafts ? '<meta name="robots" content="noindex, nofollow">' : ''}<meta name="theme-color" content="#f7f5ef"><title>${esc(title)}${title === name ? '' : ` — ${name}`}</title><link rel="canonical" href="${canonical}">${alternates}<link rel="alternate" hreflang="x-default" href="${site.url}${url(route)}"><meta property="og:title" content="${esc(title)}"><meta property="og:description" content="${esc(description)}"><meta property="og:type" content="${isArticle ? 'article' : 'website'}"><meta property="og:url" content="${canonical}"><meta property="og:locale" content="${locale === 'zh' ? 'zh_CN' : 'en_US'}">${image ? `<meta property="og:image" content="${esc(site.url)}${url(image)}">` : ''}<link rel="icon" href="data:,"><link rel="stylesheet" href="${assetUrl('/style.css')}"><script src="${url('/language.js')}"></script></head><body><a class="skip" href="#main">${t.skip}</a><header class="header"><a class="wordmark" href="${pageUrl('/')}">${name}</a><nav aria-label="${t.navigation}">${navigation}</nav><div class="header-actions">${switcher}<a class="header-contact" href="mailto:${site.email}">${t.contact} ${arrow}</a></div></header><main id="main">${body}</main><footer><div class="footer-top"><a class="wordmark" href="${pageUrl('/')}">${name}</a><div><a href="mailto:${site.email}">${t.email} ${arrow}</a><a href="${site.github}">GitHub ${arrow}</a></div></div><div class="footer-bottom"><span>© ${new Date().getFullYear()} ${name}</span><a href="#main">${t.top}</a></div></footer></body></html>`;
   }
   function paperRow(p, i) {
     return `<a class="paper-row" href="${pageUrl(`/publications/${p.slug}/`)}"><span class="row-number">${String(i + 1).padStart(2, '0')}</span><div><div class="meta">${esc(p.venue)} · ${p.year}<span class="status ${p.status === 'Under review' ? 'muted' : ''}">${status(p)}</span></div><h3>${esc(p.title)}</h3></div><span class="row-arrow" aria-hidden="true">↗</span></a>`;
@@ -177,21 +220,43 @@ for (const { locale, posts, papers, threads } of editions) {
     const pagination = threadPageCount > 1 ? `<nav class="thread-pagination" aria-label="${t.pagination}"><span>${page > 1 ? link(threadRoute(page - 1), t.newer) : ''}</span><span class="thread-page-count">${page} / ${threadPageCount}</span><span>${page < threadPageCount ? link(threadRoute(page + 1), t.older) : ''}</span></nav>` : '';
     write(threadRoute(page), layout(page === 1 ? t.thoughts : `${t.thoughts} — ${page}`, 'thoughts', `<section class="page-heading"><h1>${t.thoughts}</h1></section><section class="thread-list" aria-label="${t.thoughts}">${entries.length ? entries.map(threadRow).join('') : `<p class="thread-empty">${t.empty}</p>`}${pagination}</section>`, threadRoute(page), t.thoughtDescription), locale);
   }
+  function logRow(entry) {
+    const route = `/daily-log/${entry.slug}/`;
+    const excerpt = entry.description || entry.content.replace(/```[\s\S]*?```/g, '').replace(/!\[[^\]]*\]\([^)]*\)/g, '').replace(/\[([^\]]+)\]\([^)]*\)/g, '$1').replace(/<[^>]*>/g, '').replace(/^[\s#>*-]+/gm, '').replace(/\s+/g, ' ').trim();
+    return `<article class="daily-log-entry" id="log-${entry.slug}"><a class="daily-log-card" href="${pageUrl(route)}"><div><div class="meta">${entry.title ? `<time datetime="${entry.date}">${logDate(entry.date)}</time>` : ''}${entry.status === 'draft' ? `<span class="thread-draft">${t.draft}</span>` : ''}</div><h3>${entry.title ? esc(entry.title) : `<time datetime="${entry.date}">${logDate(entry.date)}</time>`}</h3><p>${esc(excerpt.slice(0, locale === 'zh' ? 110 : 240))}${excerpt.length > (locale === 'zh' ? 110 : 240) ? '…' : ''}</p><span class="daily-log-read">${t.readLog} <span aria-hidden="true">→</span></span></div></a></article>`;
+  }
+  for (let page = 1; page <= logPageCount; page++) {
+    const weeks = logWeeks.slice((page - 1) * logWeeksPerPage, page * logWeeksPerPage);
+    const body = weeks.map(week => `<section class="daily-log-week" aria-labelledby="week-${week}"><h2 class="daily-log-week-heading" id="week-${week}">${logWeekRange(week)}</h2>${logs.filter(entry => logWeek(entry.date) === week).map(logRow).join('')}</section>`).join('');
+    const pagination = logPageCount > 1 ? `<nav class="thread-pagination" aria-label="${t.logPagination}"><span>${page > 1 ? link(logRoute(page - 1), t.newer) : ''}</span><span class="thread-page-count">${page} / ${logPageCount}</span><span>${page < logPageCount ? link(logRoute(page + 1), t.older) : ''}</span></nav>` : '';
+    write(logRoute(page), layout(page === 1 ? t.dailyLog : `${t.dailyLog} — ${page}`, 'dailyLog', `<section class="page-heading"><h1>${t.dailyLog}</h1></section><section class="daily-log-list" aria-label="${t.dailyLog}">${body || `<p class="thread-empty">${t.logEmpty}</p>`}${pagination}</section>`, logRoute(page), t.logDescription), locale);
+  }
+  for (const [index, entry] of logs.entries()) {
+    const route = `/daily-log/${entry.slug}/`;
+    const newer = logs[index - 1];
+    const older = logs[index + 1];
+    const navigation = newer || older ? `<nav class="thread-pagination daily-log-navigation" aria-label="${t.logPagination}"><span>${newer ? link(`/daily-log/${newer.slug}/`, `${t.newer} · ${logDate(newer.date)}`) : ''}</span><span>${older ? link(`/daily-log/${older.slug}/`, `${logDate(older.date)} · ${t.older}`) : ''}</span></nav>` : '';
+    const metadata = `${entry.title ? `<time datetime="${entry.date}">${date(entry.date)}</time>` : ''}${entry.status === 'draft' ? `<span class="thread-draft">${t.draft}</span>` : ''}`;
+    write(route, layout(`${logDate(entry.date)}${entry.title ? ` · ${entry.title}` : ''} — ${t.dailyLog}`, 'dailyLog', `<article class="article daily-log-article"><a class="back-link" href="${pageUrl('/daily-log/')}">${t.allLogs}</a><header class="article-header"><h1>${esc(entry.title || logDate(entry.date))}</h1>${metadata ? `<p class="article-meta daily-log-metadata">${metadata}</p>` : ''}</header><div class="prose">${markdown(entry.content, locale)}</div>${navigation}</article>`, route, entry.description || t.logDescription), locale);
+  }
   write('/publications/', layout(t.publications, 'publications', `<section class="page-heading"><h1>${t.publications}</h1></section><section class="listing">${papers.map(paperRow).join('')}</section>`, '/publications/'), locale);
-  for (const p of [...posts, ...papers]) {
+  for (const p of [...posts, ...papers, ...lifePosts]) {
     const paper = p.type === 'publications';
+    const life = p.type === 'life';
     const route = `/${p.type}/${p.slug}/`;
-    const related = (paper ? papers : posts).filter(x => x.slug !== p.slug);
-    const cover = paper ? '' : coverOf(p.slug);
+    const related = (paper ? papers : life ? lifePosts : posts).filter(x => x.slug !== p.slug);
+    const cover = paper ? '' : coverOf(p.slug, p.type);
     const coverHtml = cover ? `<figure class="article-cover"><img src="${url(cover)}" alt="${esc(p.title)}"></figure>` : '';
     const minutes = Math.max(1, Math.ceil((p.content.replace(/<[^>]*>/g, '').match(/[\u4e00-\u9fff]|[a-zA-Z]+/g) || []).length / 300));
     const metadata = paper
       ? `<p class="authors">${esc(p.authors)}</p><div class="publication-meta"><span>${esc(p.venue)}</span><span class="status ${p.status === 'Under review' ? 'muted' : ''}">${status(p)}</span></div><div class="paper-actions"><a class="button" href="${url(p.pdf)}" target="_blank" rel="noopener">${t.readPaper} ${arrow}</a>${p.doi ? `<a class="text-link" href="${esc(p.doi)}">${t.publishedVersion} ${arrow}</a>` : ''}</div>`
       : `<p class="article-meta">${date(p.date)} · ${minutes} ${t.minutes}${p.status === 'draft' ? ` · <span class="thread-draft">${t.draft}</span>` : ''}</p>`;
-    write(route, layout(p.title, paper ? 'publications' : 'blog', `<article class="article"><a class="back-link" href="${pageUrl(`/${p.type}/`)}">${paper ? t.allPapers : t.allNotes}</a><header class="article-header"><h1>${esc(p.title)}</h1>${metadata}</header>${coverHtml}<div class="prose">${markdown(p.content, locale)}</div><div class="article-end"><span>${t.continue}</span>${related.slice(0, 1).map(r => link(`/${r.type}/${r.slug}/`, `${esc(r.title)} ${arrow}`)).join('')}</div></article>`, route, p.description, cover), locale);
+    write(route, layout(p.title, paper ? 'publications' : life ? 'life' : 'blog', `<article class="article"><a class="back-link" href="${pageUrl(`/${p.type}/`)}">${paper ? t.allPapers : life ? t.allLifePosts : t.allNotes}</a><header class="article-header"><h1>${esc(p.title)}</h1>${metadata}</header>${coverHtml}<div class="prose">${markdown(p.content, locale)}</div>${related.length ? `<div class="article-end"><span>${t.continue}</span>${related.slice(0, 1).map(r => link(`/${r.type}/${r.slug}/`, `${esc(r.title)} ${arrow}`)).join('')}</div>` : ''}</article>`, route, p.description || (life ? t.lifeDescription : site.description[locale]), cover), locale);
   }
-  const deskScene = `<div class="home-desk-scene" data-desk-scene data-embedded role="group" tabindex="0" aria-label="${esc(t.deskSceneLabel)}"></div><script type="module" src="${assetUrl('/desk-scene/scene.js')}"></script>`;
-  const indexHero = `<section class="index-hero has-scene"><div class="index-profile"><div><h1>${name}</h1><dl class="contact-details"><div><dt>${t.email}:</dt><dd><a href="mailto:${esc(site.email)}">${esc(site.email)}</a></dd></div><div><dt>GitHub:</dt><dd><a href="${esc(site.github)}">${esc(site.github.replace(/^https?:\/\//, ''))}</a></dd></div><div><dt>Substack:</dt><dd><a href="https://barytes.substack.com">barytes.substack.com</a></dd></div></dl></div><div class="index-description"><p>${esc(site.intro[locale])} ${esc(site.current[locale])}</p></div></div>${deskScene}</section>`;
+  const deskScene = `<div class="life-desk-scene" data-desk-scene data-embedded role="group" tabindex="0" aria-label="${esc(t.deskSceneLabel)}"></div><script type="module" src="${assetUrl('/desk-scene/scene.js')}"></script>`;
+  const lifeList = lifePosts.map(p => `<a class="life-post" href="${pageUrl(`/life/${p.slug}/`)}"><div><div class="meta"><time datetime="${esc(p.date)}">${date(p.date)}</time>${p.status === 'draft' ? `<span class="thread-draft">${t.draft}</span>` : ''}</div><h2>${esc(p.title)}</h2>${p.description ? `<p>${esc(p.description)}</p>` : ''}</div><span class="row-arrow" aria-hidden="true">↗</span></a>`).join('');
+  write('/life/', layout(t.life, 'life', `<section class="page-heading"><h1>${t.life}</h1></section><section class="life-post-list" aria-label="${t.lifeArticles}">${lifeList || `<p class="life-empty">${t.lifeEmpty}</p>`}</section><aside class="life-scene">${deskScene}</aside>`, '/life/', t.lifeDescription), locale);
+  const indexHero = `<section class="index-hero"><div><h1>${name}</h1><dl class="contact-details"><div><dt>${t.email}:</dt><dd><a href="mailto:${esc(site.email)}">${esc(site.email)}</a></dd></div><div><dt>GitHub:</dt><dd><a href="${esc(site.github)}">${esc(site.github.replace(/^https?:\/\//, ''))}</a></dd></div><div><dt>Substack:</dt><dd><a href="https://barytes.substack.com">barytes.substack.com</a></dd></div></dl></div><div class="index-description"><p>${esc(site.intro[locale])} ${esc(site.current[locale])}</p></div></section>`;
   const research = `<section class="section home-research"><div class="section-heading"><h2>${t.research}</h2>${link('/publications/', t.viewAll)}</div>${papers.map(paperRow).join('')}</section>`;
   const writing = `<section class="section"><div class="section-heading"><h2>${t.writing}</h2>${link('/blog/', t.allArticles)}</div><div class="post-grid">${posts.slice(0, 2).map(postCard).join('')}</div></section>`;
   const education = `<section class="education-section"><h2>${t.education}</h2><div><div class="education-row"><span>2023 — 2026</span><h3>${t.masters}</h3><p>${t.university} · ${t.supervisor}</p></div><div class="education-row"><span>2018 — 2022</span><h3>${t.bachelors}</h3><p>${t.university}</p></div></div></section>`;
@@ -200,6 +265,6 @@ for (const { locale, posts, papers, threads } of editions) {
 }
 fs.writeFileSync(`${output}/.nojekyll`, '');
 fs.writeFileSync(`${output}/robots.txt`, previewDrafts ? 'User-agent: *\nDisallow: /\n' : `User-agent: *\nAllow: /\nSitemap: ${site.url}${base}/sitemap.xml\n`);
-const sitemapEntries = paths.filter(({ route }) => route !== '/404.html' && !draftPostRoutes.has(route) && !(previewDrafts && route.startsWith('/thoughts/'))).map(({ route, locale }) => `<url><loc>${site.url}${url(localeRoute(route, locale))}</loc>${Object.entries(locales).map(([key, value]) => `<xhtml:link rel="alternate" hreflang="${value.htmlLang}" href="${site.url}${url(localeRoute(route, key))}"/>`).join('')}</url>`).join('');
+const sitemapEntries = paths.filter(({ route }) => route !== '/404.html' && !draftPostRoutes.has(route) && !draftLifeRoutes.has(route) && !draftLogRoutes.has(route) && !(previewDrafts && (route.startsWith('/thoughts/') || route.startsWith('/daily-log/')))).map(({ route, locale }) => `<url><loc>${site.url}${url(localeRoute(route, locale))}</loc>${Object.entries(locales).map(([key, value]) => `<xhtml:link rel="alternate" hreflang="${value.htmlLang}" href="${site.url}${url(localeRoute(route, key))}"/>`).join('')}</url>`).join('');
 fs.writeFileSync(`${output}/sitemap.xml`, `<?xml version="1.0" encoding="UTF-8"?><urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">${sitemapEntries}</urlset>`);
 console.log(`Built ${paths.length} pages in Chinese and English → ${output}/ (base: ${base || '/'})`);
