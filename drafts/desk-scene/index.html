@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="robots" content="noindex, nofollow">
+  <meta name="theme-color" content="#f7f5ef">
+  <title>窗边的书桌 · 草稿</title>
+  <link rel="icon" href="data:,">
+  <link rel="stylesheet" href="./style.css">
+</head>
+<body>
+  <main>
+    <header class="page-header">
+      <div><p class="draft-note" data-i18n="draft">场景草稿</p><h1 data-i18n="title">窗边的书桌</h1></div>
+      <button class="language" type="button" id="language" aria-label="Switch to English">EN</button>
+    </header>
+    <figure class="desk-scene">
+      <div class="desk-scene-stage" data-desk-scene tabindex="0" role="group" aria-label="可互动的三维书房。方向键调整视角，下面的按钮可以操作桌上的物件。">
+        <p class="loading" id="loading" data-i18n="loading">让阳光进来……</p>
+        <div class="scene-topline"><span class="time-label" id="time-label">午后 · 15:00</span><button class="reset" id="reset" type="button" data-i18n="reset">复位视角 ↺</button></div>
+        <span class="object-hint" id="object-hint" aria-hidden="true" hidden></span>
+        <span class="gesture-hint" data-i18n="gesture">拖动看看 · 点点桌上的物件</span>
+      </div>
+      <figcaption data-i18n="caption">书、唱片、吉他，还有一只晒太阳的小猫。</figcaption>
+    </figure>
+    <nav class="interactions" aria-label="场景互动" id="interactions">
+      <button type="button" data-action="book" disabled><span aria-hidden="true">▤</span><span data-i18n="book">翻一页</span></button>
+      <button type="button" data-action="lamp" aria-pressed="false" disabled><span aria-hidden="true">☼</span><span data-i18n="lamp">台灯</span></button>
+      <button type="button" data-action="marble" disabled><span aria-hidden="true">●</span><span data-i18n="marble">滚个小球</span></button>
+      <button type="button" data-action="crystal" disabled><span aria-hidden="true">◇</span><span data-i18n="crystal">转转重晶石</span></button>
+      <button type="button" data-action="tea" disabled><span aria-hidden="true">♧</span><span data-i18n="tea">歇一会儿</span></button>
+      <button type="button" data-action="sun" aria-pressed="false" disabled><span aria-hidden="true">◐</span><span data-i18n="sun">换个时辰</span></button>
+      <button type="button" data-action="cat" disabled><span aria-hidden="true">♡</span><span data-i18n="cat">摸摸小猫</span></button>
+      <button type="button" data-action="guitar" disabled><span aria-hidden="true">♩</span><span data-i18n="guitar">拨拨琴弦</span></button>
+    </nav>
+    <details class="record-list">
+      <summary data-i18n="records">墙上的唱片</summary>
+      <div>
+        <button type="button" data-album="0">Marvin Gaye · What's Going On</button>
+        <button type="button" data-album="1">The Beatles · Abbey Road</button>
+        <button type="button" data-album="2">Pink Floyd · The Dark Side of the Moon</button>
+      </div>
+    </details>
+    <p class="scene-status" id="scene-status" role="status" aria-live="polite" data-i18n="ready">随便坐坐。</p>
+    <dialog class="record-dialog" id="record-dialog" aria-labelledby="record-title">
+      <button type="button" class="record-close" data-i18n="close" id="record-close">收起 ×</button>
+      <img id="record-image" width="480" height="480" alt="">
+      <h2 id="record-title"></h2><p id="record-artist"></p>
+      <a id="record-source" target="_blank" rel="noopener noreferrer" data-i18n="recordSource">专辑官方页面 ↗</a>
+    </dialog>
+    <noscript><p>请启用 JavaScript 查看互动场景。 / Enable JavaScript to explore the room.</p></noscript>
+  </main>
+  <script type="module" src="./scene.js"></script>
+</body>
+</html>

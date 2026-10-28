@@ -1,0 +1,162 @@
+[
+  {
+    "id": "EX01",
+    "project": "SPAR",
+    "title": "SPAR - Research Program for AI Risks",
+    "author": "SPAR",
+    "source_date": "未标日期",
+    "access_date": "2026-10-27",
+    "url": "https://www.sparai.org/",
+    "type": "官方项目说明及 FAQ",
+    "read_status": "已读项目设计、参与流程及相关 FAQ",
+    "key_evidence": [
+      "远程兼职研究，页面列出每周 5–40 小时及三个月研究期，终点为 Demo Day。",
+      "学员申请导师已经提出的课题；范围可以围绕双方兴趣调整。",
+      "参与者在团队中研究并得到支持和定期反馈。"
+    ],
+    "limitations": [
+      "主办方设计自述；未读具体课题执行记录。",
+      "页面精选论文和推荐语未作为效果证据；未核实个人投入、导师差异或平均结果。"
+    ]
+  },
+  {
+    "id": "EX02",
+    "project": "Google Summer of Code",
+    "title": "How it Works | Google Summer of Code",
+    "author": "Google Summer of Code",
+    "source_date": "未标日期",
+    "access_date": "2026-10-27",
+    "url": "https://summerofcode.withgoogle.com/how-it-works",
+    "type": "官方流程说明",
+    "read_status": "已读全文",
+    "key_evidence": [
+      "贡献者与开源组织讨论建议题目并提交提案。",
+      "接受后先熟悉社区规范和代码库，与导师约定里程碑。",
+      "最终提交代码和项目总结，导师评估是否通过。"
+    ],
+    "limitations": [
+      "流程设计；通过项目不等同代码已经合并或长期被采用。",
+      "本页未提供研究问题创新、个人成长或因果效果的评估。"
+    ]
+  },
+  {
+    "id": "EX03",
+    "project": "MIT Learning Creative Learning",
+    "title": "Learning Creative Learning — April 2026",
+    "author": "Lifelong Kindergarten Group, MIT Media Lab",
+    "source_date": "未标日期（页面介绍 2026 年 4–5 月轮次）",
+    "access_date": "2026-10-27",
+    "url": "https://lcl.media.mit.edu/",
+    "type": "官方课程结构与活动说明",
+    "read_status": "已读全文",
+    "key_evidence": [
+      "围绕 Projects、Passion、Peers、Play，课程为六周自定节奏。",
+      "每周提供短视频、阅读、开放小项目与论坛分享讨论；活动均可自选。",
+      "面向关注学习与创造力的成人，包括教育者、创作者和研究者。"
+    ],
+    "limitations": [
+      "教育理念与课程设计，未测量技术研究深度。",
+      "自由选择活动降低门槛，但无法从该页判断参与者是否持续完成困难项目。"
+    ]
+  },
+  {
+    "id": "EX04",
+    "project": "Neuromatch Academy: Deep Learning",
+    "title": "Daily guide for projects — Neuromatch Academy: Deep Learning",
+    "author": "Neuromatch Academy",
+    "source_date": "未标日期",
+    "access_date": "2026-10-27",
+    "url": "https://deeplearning.neuromatch.io/projects/docs/project_guidance.html",
+    "type": "官方逐日项目操作手册",
+    "read_status": "已读 Summary、Templates、TAs 及 Week 1 至 Week 3 主要项目步骤",
+    "key_evidence": [
+      "从兴趣、文献与模板形成问题，再找数据并修订假设，允许早期换题。",
+      "新手可用模板起步，随后发展自己的问题；项目 TA 约每两天协助收敛。",
+      "中期摘要帮助界定证据需求；负结果要解释局限，正结果要补控制实验。"
+    ],
+    "limitations": [
+      "公开操作流程较具体，但本轮未追踪参与者是否实际执行以及是否摆脱模板依赖。",
+      "手册包含小组和 TA 支持；个人复用流程后的效果未知，页面未标版本日期。"
+    ]
+  },
+  {
+    "id": "EX05",
+    "project": "ML4Good",
+    "title": "Frequently Asked Questions",
+    "author": "ML4Good",
+    "source_date": "未标日期",
+    "access_date": "2026-10-27",
+    "url": "https://ml4good.org/faqs/",
+    "type": "官方 FAQ",
+    "read_status": "已读全文",
+    "key_evidence": [
+      "预读用于建立共同基础；技术课程包括两天独立项目。",
+      "除部分基础技术内容外，更重视理解 AI 安全领域、职业路径及个人 theory of change。",
+      "项目说明课程强度高，日间短休息，晚上自由。"
+    ],
+    "limitations": [
+      "主办方对设计的介绍，不是实际课堂或参与者记录。",
+      "未读项目成果；两天独立项目不能证明自主选题或长期深度。"
+    ]
+  },
+  {
+    "id": "EX06",
+    "project": "South Park Commons",
+    "title": "Who Should Join SPC?",
+    "author": "South Park Commons",
+    "source_date": "2022-12-10",
+    "access_date": "2026-10-27",
+    "url": "https://blog.southparkcommons.com/p/who-should-join-spc",
+    "type": "官方成员类型与探索机制说明",
+    "read_status": "已读正文",
+    "key_evidence": [
+      "将 -1 到 0 描述为明确投入、寻找下一项事业或职业路径的探索阶段。",
+      "文中实例包含多周学习论坛、原型制作、黑客松与同伴反馈。",
+      "所举成员常已有创业、技术管理或领域经验；建议先休息恢复，再开展探索。"
+    ],
+    "limitations": [
+      "2022 年招募叙事，不能视作 2026 年完整运营手册。",
+      "成员案例是筛选后的成功叙事，既有能力和网络构成重要替代解释；本轮未读独立复盘。"
+    ]
+  },
+  {
+    "id": "EX07",
+    "project": "OpenAI Residency",
+    "title": "OpenAI Residency",
+    "author": "OpenAI",
+    "source_date": "未标日期",
+    "access_date": "2026-10-27",
+    "url": "https://openai.com/residency/",
+    "type": "官方项目说明与 FAQ",
+    "read_status": "已读项目说明、研究链接列表及导师和项目范围 FAQ",
+    "key_evidence": [
+      "六个月项目，研究者和工程师进入 OpenAI 团队做真实研究。",
+      "居民与导师共同定义和限定项目范围；导师提供资源、指导和持续反馈。",
+      "页面强调已有意义的构建记录、从想法到原型的能力与自主性。"
+    ],
+    "limitations": [
+      "设计、选拔方向和精选参与者推荐语，不能分离筛选与培养作用。",
+      "本轮未读列出的论文或执行日志，也未核实个人贡献与实际导师频率。"
+    ]
+  },
+  {
+    "id": "EX08",
+    "project": "LASR Labs",
+    "title": "FAQs — LASR Labs",
+    "author": "LASR Labs",
+    "source_date": "未标日期",
+    "access_date": "2026-10-27",
+    "url": "https://www.lasrlabs.org/faqs",
+    "type": "官方 FAQ",
+    "read_status": "已读全文",
+    "key_evidence": [
+      "课题在 Week 0 公布，明确意图是练习判断哪些项目有前景，并按影响价值选择。",
+      "线下团队紧密协作，官方要求全职每周 40 小时。",
+      "列举既有题目包括 AI control、监控、可解释性、思维链忠实性与串通。"
+    ],
+    "limitations": [
+      "项目选择机制是主办方意图；未验证参与者实际怎样比较题目。",
+      "未读成果与失败记录，不能把线下密集团队条件直接推为个人实践效果。"
+    ]
+  }
+]

@@ -1,0 +1,134 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex,nofollow"><title>我怎样把一个面试准备 Skill 拆成六个 Skills · 本地草稿</title><style>
+:root{color-scheme:light;--paper:#f7f5ef;--ink:#283332;--muted:#667069;--line:#d6dbd1;--accent:#3b6962;}
+*{box-sizing:border-box}body{margin:0;background:var(--paper);color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,'PingFang SC','Noto Sans CJK SC',sans-serif;-webkit-font-smoothing:antialiased}
+.review-bar{border-bottom:1px solid var(--line);padding:18px 24px;font-size:13px;letter-spacing:.04em;color:var(--muted);display:flex;justify-content:space-between;gap:20px}.review-bar a{color:inherit}
+main{max-width:960px;padding:64px 36px 96px;margin:0 auto}.eyebrow{font-size:13px;color:var(--accent);letter-spacing:.1em;margin-bottom:18px}h1{font-size:clamp(30px,4.2vw,46px);line-height:1.43;font-weight:650;letter-spacing:-.025em;max-width:830px;margin:0 0 22px}.meta{font-size:14px;color:var(--muted);margin-bottom:32px}.cover{margin:0 0 40px}.cover img{width:100%;height:auto;border-radius:7px;display:block}.cover figcaption{font-size:12px;color:var(--muted);margin-top:11px}
+.prose{max-width:770px;margin:auto;font-size:18px;line-height:1.95;letter-spacing:.015em}.prose p{margin:0 0 1.4em}.prose h2{font-size:27px;font-weight:620;line-height:1.5;letter-spacing:0;margin:2.2em 0 .85em}.prose strong{font-weight:630}.prose a{color:var(--accent);text-decoration-thickness:1px;text-underline-offset:4px;overflow-wrap:anywhere}.prose code{font-family:ui-monospace,'SFMono-Regular',Menlo,monospace;font-size:.87em;background:#e9ede4;border-radius:3px;padding:.1em .3em;overflow-wrap:anywhere}.prose blockquote{margin:1.6em 0;padding:12px 24px;border-left:3px solid #a1b5a0;color:#4a5d53;background:#eef0e7}.prose blockquote p:last-child{margin-bottom:0}.prose table{width:100%;border-collapse:collapse;font-size:15px;line-height:1.65;letter-spacing:0;margin:1.6em 0 2em}.prose th,.prose td{text-align:left;vertical-align:top;padding:14px 12px;border-bottom:1px solid var(--line)}.prose th{font-weight:600;background:#edf0e7}.prose img{display:block;width:100%;height:auto;margin:2em 0;border:1px solid var(--line);border-radius:7px}.prose table code{white-space:nowrap;font-size:.9em}.article-end{border-top:1px solid var(--line);max-width:770px;margin:44px auto 0;padding-top:20px;font-size:13px;color:var(--muted)}
+@media(max-width:600px){.review-bar{padding:14px 18px;font-size:12px}.review-bar span:last-child{display:none}main{padding:34px 20px 64px}.prose{font-size:17px;line-height:1.9}.prose h2{font-size:24px;margin-top:1.9em}.prose th,.prose td{padding:12px 8px}.prose table{font-size:13px}.prose blockquote{padding:10px 18px}.cover{margin-bottom:30px}}
+</style></head><body><div class="review-bar"><span>本地草稿 · 待确认内容</span><span><a href="article.md">Markdown 正文</a> · <a href="review-notes.md">稿件依据与配图说明</a></span></div><main><header><h1>我怎样把一个面试准备 Skill 拆成六个 Skills</h1><div class="meta">刘倍延 · 2026-10-10 · 约 14 分钟阅读</div></header><figure class="cover"><img src="assets/cover-01-tools-sand-no-text.png" alt="把巨大的多功能工具拆成六个清楚的组件"></figure><article class="prose"><p>看了榛子在发光老师分享的找工作经验<a href="https://www.superlinear.academy/c/connections/offer-100">《我面试的每家公司都给了我 offer｜成功率 100% 的秘诀（上）》</a>，我对她利用 ChatGPT 和 Cursor 搭建岗位的世界和工作语境，然后把真实工作做一遍的经历感到大为震撼。于是我想：我能学习这个能力吗？有没有可能让更多人也拥有这个能力？</p>
+<p>所以，我尝试把这件事做成一组帮助自己准备面试的 skills：<a href="https://github.com/Barytes/interview-prep-like-a-builder">interview-prep-like-a-builder</a>。它从一个 <code>builder-interview</code> 开始，后来拆成了六个。</p>
+<p>从一个 skill 拆成六个，背后是<strong>职责分离、公共约定复用、围绕共同目标协作</strong>的设计思路。每个 skill 负责一类明确的任务，可以独立改进；教学和项目协作共用学习记录，反馈与会话归档各有用途，让整个学习过程在任务切换中保持连贯。</p>
+<h2>最初我想解决什么</h2>
+<p>就如榛子老师所说，“怀着 Builder 心态准备面试”是在尽可能重建这份工作的 context，“站在对方的组和视角里，想他们可能在做什么，每天面对的问题和语境是什么”。OpenAI 的翁家翌在访谈中也强调了 <a href="https://www.bilibili.com/video/BV1darmBcE4A/">context 对工作的意义</a>：一个人能够做好一项工作，很大程度上依赖于对项目背景的充分掌握。我此前向鸭哥请教了一个问题，他给的<a href="https://www.superlinear.academy/c/q-a?message_id=2158863221#message_2158383162">建议</a>也说明了同一个道理：借助 AI 加速实现的同时，人需要理解场景、用户和目标，提供关键背景，并参与方案选择与结果验收。带着这些认识去学习、做项目，再通过与从业者交流修正预判，面试准备就能逐步接近真实工作的思考和实践。</p>
+<p>榛子老师是从跟 ChatGPT 对话开始的。她先问清广告需求和库存分别指什么，再把问题缩到 Netflix 这类视频平台：预测依赖哪些信息，结果又会影响哪些决策。接着，她沿着供给、价格和广告主购买之间的关系自己做推演，把大型赛事、提前售卖广告位等情境放进去，追问原来的解释是否还成立。到了设计预测系统时，她又把各团队的需要带进来：他们要能解释业务变化，也要知道自己可以做什么。这份工作的 context，就是在这些具体的追问和修正里逐渐建立起来的。随后，她用 Cursor 按模拟的数据分布和 granularity 生成数据，再基于这些模拟数据建模、做 forecast。</p>
+<p>我缺少一些目标岗位的工作经验。看 JD 能认识很多词：harness、评估、失败复现、模型接入、轨迹收集。但这些词拼起来，还不足以让我知道：加入团队以后，工作怎样来到我面前，要跟谁合作，要作什么判断，最后交付给谁。</p>
+<p>我希望借助 AI 尽快建立对这份工作的理解，再按这个理解把有代表性的工作模拟着做一遍。过程中，我应该能参与需求和方案的选择，检查结果，也能在面试里解释自己为什么这样做。</p>
+<p>最初，我参考了 Matt Pocock 的 <a href="https://github.com/mattpocock/skills/blob/main/docs/productivity/teach.md"><code>teach</code> skill</a> 的教学思路，希望通过对话讲解、练习和反馈，帮助缺少相关工作经验的人逐渐形成自己的判断。岗位从业者的真实访谈、博客和工作分享，以及团队近期公开的产品更新、开源项目和技术进展，都可以成为教学材料。</p>
+<p>所以，最初的 <code>builder-interview</code> 有一个很大的目标：帮助我形成贴近真实工作的 mental world model。我还给它设了两条成功标准：能解释目标团队最新进展背后的缘由和原理；能参与相关领域的前沿讨论，并作出一点贡献。</p>
+<p>当时，这些话听起来很完整。真正试用以后，我才发现，它们给 AI 留出了很多我没有预料到的走法。</p>
+<h2>第一轮试用怎样跑偏</h2>
+<p>我用 OpenAI 的 Applied AI Engineer（Codex Core Agent）岗位试用。最明显的问题是，AI 很容易从一个真实案例或最新 commit 出发，一路深入技术细节。</p>
+<p>每一段单独看都可能有用：讲一次工具执行、介绍 harness、分析一个修复。但连续几轮以后，我对某个局部知道得更多了，对整份工作仍然不清楚。原本希望先覆盖主要工作，实际却一直在往一个局部钻。</p>
+<p>这还暴露了成功标准的问题。深入理解一个 commit，确实可能让我解释一次最新进展，甚至讨论一个改进。但我仍然未必知道这个岗位的其他职责，也未必能综合运用这些知识完成一项工作。</p>
+<p>另一类问题发生在每次回答里。AI 会把岗位定义、产品战略、几个案例、执行流程和练习题塞进同一个回答。它还会花篇幅介绍自己查了什么、怎样判断、准备怎样推进。我还没有建立前一个概念和工作场景的联系，下一个就来了。</p>
+<p>我给过一个很直接的反馈：</p>
+<blockquote>
+<p>为什么要强调“我会怎么做”呢？又不是在考验你怎么解决这个问题，目标是让用户建立正确的 mental 模型和正确的理解。</p>
+</blockquote>
+<p>于是，我们把教学起点逐渐改成“你加入了目标团队”：先讲清任务来源、合作、判断和交付，再从这些工作需要中引出技术。从业者的访谈和工作分享也应该用于说明这些关系。</p>
+<p>可是，继续试用又发现：开场讲过岗位背景，并不能保证后面始终围绕它展开。一个案例依然可以把整段学习带进深处。我开始重新考虑，这个 skill 究竟应该提供哪几种帮助。</p>
+<h2>先分清教我和一起做项目</h2>
+<p>在讨论中，我提出把两件事分开：一件是把工作需要掌握的知识和技能讲清楚；另一件是搭建逼近真实工作的模拟项目。</p>
+<p>两件事可以交替发生，但推进方式不同。</p>
+<p>例如，我不理解工具结果怎样进入模型输入，需要的是解释、例子和练习。此时，AI 要根据我的理解决定怎样继续讲。</p>
+<p>如果我要做一个 Agent 项目，则需要先确定问题、使用者、范围和验收要求，随后实现、运行、检查结果。知识缺口可以在过程中补，但补完以后应该回到项目。</p>
+<p>因此，原来的大 skill 被拆成了 <code>teach-me</code> 和 <code>build-with-me</code>。前者帮助我认识岗位、学习知识和练习；后者和我一起选题、确定需求、实现及验收。</p>
+<p>近期目标也变得更具体：先帮助我做出能演示、能写进简历、能在面试里讲清选择与个人贡献的岗位项目。理解最新进展、参与前沿讨论，仍然可以成为进一步的目标。</p>
+<p>这个调整让我更容易判断下一轮对话应该干什么。正在解释一个机制，就看我是否能运用它；正在做项目，就看我们是否推进了约定的交付。</p>
+<h2>拆开后公共约定该放在哪</h2>
+<p>拆成两个 skill 以后，很快出现了一个维护问题：它们都需要知道我的目标、当前理解、项目进度，也都需要遵循相同的教学约定。</p>
+<p>第一次整理时，有些仍在使用的约定和记录说明被放进了 <code>history/</code>。我指出：既然当前 skill 还依赖它，它就应该有一个清楚的当前位置。随后又讨论了复制两份公共内容的办法，我的疑问是：两份不同步怎么办？</p>
+<p>最后，我们把读取和保存学习记录、提供共同教学约定的工作提炼成 <code>track-progress</code>。</p>
+<p>继续同一轮岗位准备时，<code>teach-me</code> 和 <code>build-with-me</code> 使用同一个学习记录目录。项目中需要展开补课，就记下要学什么和补完后返回的任务，把同一个目录传过去。这样，切换教学方式时仍然知道正在做什么。</p>
+<p><img src="assets/shared-learning-record.png" alt="教学与做项目共用一本学习记录，小橙在两项工作之间翻动同一本笔记"></p>
+<p>三个原有的文件名保留了下来，但含义重新说清楚了：</p>
+<table>
+<thead>
+<tr>
+<th>文件</th>
+<th>保存什么</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>MISSION.md</code></td>
+<td>准备目标与安排：目标岗位、希望达到的结果、期限和投入</td>
+</tr>
+<tr>
+<td><code>WORLD_MODEL.md</code></td>
+<td>岗位与项目说明：工作关系、学习清单、项目需求、约束和方案</td>
+</tr>
+<tr>
+<td><code>PROGRESS.md</code></td>
+<td>学习表现与进度：我的解释和操作、教学判断、项目结果及下一步</td>
+</tr>
+</tbody></table>
+<p>命名也是这次迭代的一部分。“学习上下文”“理解证据”这类词看起来能装进很多东西，真要读写时却不够明确。我们开始用 <code>CONTEXT.md</code> 统一术语：什么是学习表现，什么是教学判断，什么是一轮岗位准备，哪些东西属于学习记录。</p>
+<p>明确这些词以后，提示词可以更短。每个 skill 直接说自己负责什么；共同约定和记录格式只维护一份，具体格式放在参考文件里。</p>
+<h2>先留下真实反馈再谈评分</h2>
+<p>有了多个 skill，我自然想知道：改一个版本以后，下一次使用到底有什么变化？能不能积累 runs、做成数据集，比较效果？</p>
+<p>讨论很快走向了版本化测试集、对照运行、评分和实验追踪。然后我意识到，眼下最关键的一步还没解决：我还在探索怎样的教学真正能帮到自己。</p>
+<p>我当时说：</p>
+<blockquote>
+<p>效果只能由用户，目前暂时就是我来确定，也依赖我一次一次地交互。</p>
+</blockquote>
+<p>我暂时没有能稳定复用的教学评价指标，也不希望现在就写一个程序化运行 Agent、让 LLM 扮演学生并评分的平台。对当前阶段来说，我实际使用时的具体反馈更能决定下一次改什么。</p>
+<p>这催生了 <code>note-feedback</code>。它保存我对教学方式的评价、偏好和改进建议，例如“还没举例就让我解释，我没法回答”，也可以记录某个有效的方法。</p>
+<p>这里需要区分：“我还没弄懂 model 和 harness 的区别”，说明我有知识缺口，应该继续讲解并更新学习记录；“你讲了很多组件，但我还是不知道第一步做什么”，则指出了教学方式的问题，值得进入反馈记录。</p>
+<p>反馈放在仓库全局的 <code>docs/feedback.md</code>，同时保留来自哪个岗位、哪次对话、什么情境。几个 skill 会用于不同岗位，集中记录能让下次开发找得到同类问题，具体情境则决定一条意见可以用在哪里。</p>
+<p>改进项采用三个状态：<strong>待处理 → 待试用 → 已确认</strong>。修改写进 skill 后进入“待试用”；等后续实际使用时，我明确认为它有帮助，才进入“已确认”。这样，“已经改了”与“这次改动起作用了”有各自的位置。</p>
+<h2>会话记录和教学反馈分别保存</h2>
+<p>只有反馈摘要，仍然不足以还原一次试用。我希望以后能回看当时的对话、工具调用、模型、harness 和 skill 版本。因此，又增加了 <code>save-trace</code>。</p>
+<p>它的动作很简单：我明确调用时，把当前测试会话截至此刻已经落盘的记录，归档到对应岗位的 <code>runs/</code>。它从已有的 Codex JSONL 日志导出，不需要另写一个运行 Agent 的程序。</p>
+<p>一个 run 对应一个 Codex 会话 ID。同一次会话可以切换 skill、补课、回到项目；再次调用归档时，更新同一个 run，并保留历次归档信息和技能快照。</p>
+<p>这个设计还遇到了两个具体问题。</p>
+<p>第一，同一次对话可能换过模型。检查开发会话时，我们发现日志里记录过两个模型，所以模型信息需要按回合保存。</p>
+<p>第二，归档时的 Git commit，不能自动说明会话早期使用了哪版 skill。对话中可能改过文件，也可能有未提交的修改。归档会保存当时的文件快照，并把它标为“归档时版本”；早期使用的版本，则按能够取得的依据记录。</p>
+<p>我还专门提醒了一句：</p>
+<blockquote>
+<p>注意 trace 和 feedback 要区分，不要混淆。</p>
+</blockquote>
+<p>现在，三种记录各有用途：学习记录帮助继续准备；trace 保存发生过的对话、工具事件和运行信息；feedback 保存我对教学方式的评价，以及改进项的处理进展。反馈可以引用 trace 中的具体事件。</p>
+<p><code>save-trace</code> 只在我明确调用时执行。记录反馈、更新进度和切换 skill，都不会顺带归档整段会话。我仍然可以照常使用 Codex，在想留下这次过程时再保存。</p>
+<h2>六个 Skills 怎样一起工作</h2>
+<p>日常使用的入口是 <code>prep-me</code>。我告诉它想学什么、做什么或继续什么，它根据当前任务选择相应 skill。它传递必要的衔接信息，具体教学和项目工作由对应 skill 接手。</p>
+<p>最终形成了六个 skill：</p>
+<table>
+<thead>
+<tr>
+<th>Skill</th>
+<th>负责什么</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>prep-me</code></td>
+<td>选择并衔接当前任务</td>
+</tr>
+<tr>
+<td><code>teach-me</code></td>
+<td>认识岗位、讲解、练习和补课</td>
+</tr>
+<tr>
+<td><code>build-with-me</code></td>
+<td>选题、需求、方案、实现、验收和改进</td>
+</tr>
+<tr>
+<td><code>track-progress</code></td>
+<td>维护学习记录，提供共同教学约定</td>
+</tr>
+<tr>
+<td><code>note-feedback</code></td>
+<td>保存教学反馈，跟踪全局改进项</td>
+</tr>
+<tr>
+<td><code>save-trace</code></td>
+<td>显式归档会话过程和运行信息</td>
+</tr>
+</tbody></table>
+<p>项目也从个人计划仓库里迁到了独立目录。<code>skills/</code> 放当前技能，<code>tests/roles/</code> 放岗位资料和学习、试用记录，<code>docs/</code> 放项目说明与反馈，<code>docs/history/</code> 保留历史材料。</p>
+<p>根目录的 <code>AGENTS.md</code> 还区分了开发与试用时的职责：我要求修改 skill 时，AI 要理解结构、读取相关反馈并修改文件；我准备岗位时，它才执行教学和项目任务。这样，同一个仓库既能用来开发这组 skills，也能直接试用它们。</p>
+<h2>下一步仍然是去用</h2>
+<p>我在讨论里提出过一个担忧：<strong>我是在边用边做，暂时还没有完成一项能说明这套方法有效的学习任务。</strong> 做出一组结构清楚的 skills 很容易让人觉得已经有成果，但我最初想要的成果，仍然是岗位能力和能讲清楚的项目经历。</p>
+<p>目前，我对 skill 开发的理解是：先把自己希望 AI 怎样帮忙写出来，实际使用，留下具体的失败和有效做法，再决定哪些职责需要拆开、哪些约定应该共用。提示词里的每一项要求，最好能回答“这会改变哪一个实际行为”。</p>
+<p>接下来，我希望选一个具体岗位，用这组 skills 把一项小项目做到能演示、能解释、能按新要求继续修改。那次使用中哪些地方帮到了我、哪些地方又做偏了，会成为下一轮开发的依据。</p>
+</article><div class="article-end">本地审阅稿。正文和配图确认后，再决定正式发布。</div></main></body></html>

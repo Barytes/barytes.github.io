@@ -3,6 +3,5 @@ dist/
 .DS_Store
 output/
 .playwright-cli/
-drafts/
 dist-drafts/
 .substack/

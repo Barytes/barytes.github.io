@@ -1,0 +1,66 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="1170" viewBox="0 0 1600 1170" role="img" aria-labelledby="title desc">
+  <title id="title">六个 Skills 的分工</title>
+  <desc id="desc">prep-me 选择教学或项目任务，teach-me 与 build-with-me 可以相互切换并共用 track-progress 提供的教学约定及学习记录。note-feedback 保存教学反馈与改进项，save-trace 仅在用户明确调用时保存会话记录和运行信息。反馈可引用会话中的事件。</desc>
+  <defs>
+    <marker id="arrow" viewBox="0 0 12 12" refX="10" refY="6" markerWidth="10" markerHeight="10" orient="auto-start-reverse"><path d="M2 2L10 6L2 10" fill="none" stroke="#5b6866" stroke-width="1.5"/></marker>
+    <style>
+      text {font-family: -apple-system, BlinkMacSystemFont, 'PingFang SC', 'Noto Sans CJK SC', sans-serif; fill: #283332;}
+      .heading {font-size: 47px; font-weight: 650;}
+      .sub {font-size: 27px; fill: #69706b;}
+      .label {font-size: 26px; fill: #67726a;}
+      .name {font-size: 36px; font-weight: 600; font-family: 'SFMono-Regular', Consolas, monospace;}
+      .body {font-size: 28px;}
+      .small {font-size: 25px; fill: #596762;}
+      .path {fill: none; stroke: #5b6866; stroke-width: 2.5; marker-end: url(#arrow);}
+      .line {fill: none; stroke: #5b6866; stroke-width: 2.5;}
+    </style>
+  </defs>
+  <rect width="1600" height="1170" rx="28" fill="#f7f5ef"/>
+  <text x="72" y="91" class="heading">六个 Skills 的分工</text>
+  <text x="72" y="141" class="sub">同一轮岗位准备，共用学习记录；反馈和会话归档分别维护。</text>
+  <path d="M72 177H1528" stroke="#d8dcd1"/>
+  <text x="72" y="226" class="label">开始或继续准备</text>
+  <rect x="292" y="261" width="480" height="143" rx="18" fill="#e8eee6" stroke="#bacaba"/>
+  <text x="532" y="317" text-anchor="middle" class="name">prep-me</text>
+  <text x="532" y="364" text-anchor="middle" class="body">选择并衔接当前任务</text>
+  <path class="path" d="M532 404V452H290V489"/>
+  <path class="path" d="M532 452H790V489"/>
+  <rect x="72" y="495" width="436" height="174" rx="18" fill="#eaf0f1" stroke="#b4c8cb"/>
+  <text x="290" y="552" text-anchor="middle" class="name">teach-me</text>
+  <text x="290" y="598" text-anchor="middle" class="body">认识岗位、讲解与练习</text>
+  <text x="290" y="640" text-anchor="middle" class="small">根据学习表现调整教学</text>
+  <rect x="572" y="495" width="436" height="174" rx="18" fill="#f1e9d8" stroke="#d4c49e"/>
+  <text x="790" y="552" text-anchor="middle" class="name">build-with-me</text>
+  <text x="790" y="598" text-anchor="middle" class="body">选题、需求、实现与验收</text>
+  <text x="790" y="640" text-anchor="middle" class="small">用户参与关键选择和操作</text>
+  <path d="M510 582H568" fill="none" stroke="#5b6866" stroke-width="2.2" marker-start="url(#arrow)" marker-end="url(#arrow)"/>
+  <text x="532" y="715" text-anchor="middle" class="small">补课与项目可交替，记录返回任务</text>
+  <path class="line" d="M290 669V752H790V669"/>
+  <path class="path" d="M532 752V791"/>
+  <rect x="292" y="798" width="480" height="150" rx="18" fill="#e8eee6" stroke="#bacaba"/>
+  <text x="532" y="855" text-anchor="middle" class="name">track-progress</text>
+  <text x="532" y="902" text-anchor="middle" class="body">共同教学约定与学习记录</text>
+  <path class="path" d="M532 948V993"/>
+  <rect x="72" y="1000" width="936" height="106" rx="15" fill="#fffdf8" stroke="#d8dcd1"/>
+  <text x="108" y="1041" class="small">MISSION.md · WORLD_MODEL.md · PROGRESS.md</text>
+  <text x="108" y="1081" class="small">准备目标、岗位与项目说明、学习表现与进度</text>
+  <path d="M1043 216V1106" stroke="#d8dcd1" stroke-dasharray="6 9"/>
+  <text x="1080" y="226" class="label">两项独立的记录职责</text>
+  <rect x="1080" y="261" width="448" height="280" rx="18" fill="#efe4dd" stroke="#cfb6a7"/>
+  <text x="1110" y="318" class="name">note-feedback</text>
+  <text x="1110" y="371" class="body">保存教学反馈与改进项</text>
+  <text x="1110" y="415" class="small">用户评价、偏好、有效做法</text>
+  <text x="1110" y="462" class="small">docs/feedback.md</text>
+  <text x="1110" y="507" class="small">待处理 → 待试用 → 已确认</text>
+  <rect x="1080" y="655" width="448" height="304" rx="18" fill="#eeeae4" stroke="#c9c2b5"/>
+  <text x="1110" y="713" class="name">save-trace</text>
+  <text x="1110" y="766" class="body">用户显式调用时归档</text>
+  <text x="1110" y="810" class="small">对话、工具事件、运行信息</text>
+  <text x="1110" y="855" class="small">tests/roles/&lt;岗位&gt;/runs/</text>
+  <text x="1110" y="903" class="small">同一会话再次调用更新归档</text>
+  <path class="path" d="M1304 541V649" stroke-dasharray="6 7"/>
+  <rect x="1096" y="573" width="416" height="45" fill="#f7f5ef"/>
+  <text x="1304" y="604" text-anchor="middle" class="small">反馈可引用 trace 中的事件</text>
+  <text x="1080" y="1042" class="small">记录反馈、切换 skill、更新进度</text>
+  <text x="1080" y="1084" class="small">均不触发会话归档</text>
+</svg>

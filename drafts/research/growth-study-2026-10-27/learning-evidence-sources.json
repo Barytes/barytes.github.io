@@ -1,0 +1,31 @@
+[
+  {
+    "id": "LS01",
+    "project": "辅助研究",
+    "title": "How AI Impacts Skill Formation",
+    "author": "Judy Hanwen Shen; Alex Tamkin",
+    "source_date": "2026-01-28 v1; 2026-02-01 v2",
+    "access_date": "2026-10-27",
+    "url": "https://arxiv.org/html/2601.20245v2",
+    "related_urls": [
+      "https://www.anthropic.com/research/AI-assistance-coding-skills"
+    ],
+    "type": "preregistered_randomized_study_and_author_summary",
+    "read_status": "read_methods_main_results_qualitative_analysis_limitations_and_official_summary",
+    "key_evidence": "52 developers unfamiliar with Trio were assigned chat-based AI access or no AI while learning two tasks. Immediate unaided comprehension was lower with AI; completion-time difference was not significant. Usage-mode clusters are observational.",
+    "limitations": "Short unfamiliar-library tasks and an immediate quiz; no long-term expertise or agentic-Codex test. Precise percentage summaries are not used because paper point-gap arithmetic and headline rounding do not fully align. HTML display date differs from arXiv submission metadata; metadata controls version date."
+  },
+  {
+    "id": "LS02",
+    "project": "辅助研究",
+    "title": "Incentives and Creativity: Evidence from the Academic Life Sciences",
+    "author": "Pierre Azoulay; Joshua S. Graff Zivin; Gustavo Manso",
+    "source_date": "2011-09, RAND Journal of Economics 42(3):527–554",
+    "access_date": "2026-10-27",
+    "url": "https://dspace.mit.edu/entities/publication/8ad96999-7c50-42d8-aedf-778272c766de",
+    "type": "observational_research_author_manuscript_repository_record",
+    "read_status": "read_repository_abstract_and_public_author_abstract; full_PDF_unavailable",
+    "key_evidence": "Study compares HHMI investigators and similarly accomplished NIH-funded researchers using propensity weighting and difference-in-differences, reporting greater high-impact output and exploratory change under HHMI.",
+    "limitations": "Only abstract and repository metadata read. Not randomized, not specific to Janelia trainees, and cannot isolate mentorship, resources, autonomy or time horizon. Used as a supporting research lead, not a verified effect-size estimate."
+  }
+]

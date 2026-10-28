@@ -73,8 +73,9 @@ The full translated article.
 - `content/publications/*.md`：论文详情，文件名生成论文 URL。
 - `content/thoughts/*.md`：想法原稿，一份文件组织一组 thread，正文独立于网页存储。
 - `content/daily-log/YYYY-MM-DD.md`：每日研究日志原稿，一天一份，按日期倒序并自动按周分组。
-- `drafts/daily-log/`：每天的日志草稿，不参与网站构建，沿用 `drafts/` 的 Git 忽略规则。
-- `drafts/life/`：生活文章的原始草稿，不参与网站构建，沿用 `drafts/` 的 Git 忽略规则。
+- `drafts/`：纳入 Git 版本管理的原始草稿、研究资料和设计过程文件，不参与正式构建或草稿预览。发布到网站的内容在 `content/` 维护。
+- `drafts/daily-log/`：每天的日志草稿，随 `drafts/` 一起提交，不参与网站构建。
+- `drafts/life/`：生活文章的原始草稿，随 `drafts/` 一起提交，不参与网站构建。
 - `public/blog/`：博客图片。封面文件名必须与文章 slug 一致，例如 `content/blog/auto-research.md` 对应 `public/blog/auto-research.png`；构建时自动出现在列表卡片和文章页。文内配图也放在此目录，正文用 `/blog/filename` 引用。
 - `public/life/`：生活文章图片。可选封面与文章 slug 同名，显示在文章页；正文图片用 `/life/文件名` 引用。
 - `public/papers/`：论文 PDF。
@@ -148,7 +149,7 @@ A description of the work.
 
 生活分区用于日常与兴趣相关的文章，列表按日期倒序显示标题、日期和可选摘要，点击进入全文。3D 书房缩小放在列表底部作为彩蛋，保留点击、拖动与键盘交互。
 
-原始草稿先放在 `drafts/life/{slug}.md`，直接写 Markdown 即可，不必先补齐元数据或译文。这个目录不参与正式构建或草稿预览，并沿用 `drafts/` 的 Git 忽略规则。准备在网站预览时，将文章移入 `content/life/`，补齐元数据和对应译文。
+原始草稿先放在 `drafts/life/{slug}.md`，直接写 Markdown 即可，不必先补齐元数据或译文。这个目录随 `drafts/` 纳入 Git 版本管理，不参与正式构建或草稿预览。准备在网站预览时，将文章移入 `content/life/`，补齐元数据和对应译文。
 
 `content/life/{slug}.md` 的文章格式示例：
 
@@ -168,13 +169,13 @@ description: "可选的文章摘要。"
 
 省略 `status` 时默认作为草稿；`draft` 只在 `npm run dev:drafts` 中显示，并标注「草稿 / Draft」，不进入站点地图。确认发布后设为 `published`，正式构建才会收录。图片放在 `public/life/`，正文使用 `/life/文件名` 引用；可选封面使用 `{slug}.png`、`.jpg`、`.jpeg` 或 `.webp`，自动显示在文章页。站内链接由构建器处理语言与部署子路径。
 
-Life supports articles about everyday life and personal interests, ordered newest first, with the small interactive study below the list. Start raw Markdown drafts in `drafts/life/`, which is Git-ignored and excluded from both builds and previews. Move articles into `content/life/` with metadata and full translations in `content/translations/{zh,en}/life/` when ready for a website preview; keep images in `public/life/`. Titles, quoted calendar dates and bodies are required; descriptions and covers are optional. Omitted `status` means `draft`; preview with `npm run dev:drafts` and set `published` after publication is approved. Each article has matching `/life/{slug}/` and `/en/life/{slug}/` pages.
+Life supports articles about everyday life and personal interests, ordered newest first, with the small interactive study below the list. Start raw Markdown drafts in `drafts/life/`, which is versioned in Git with the rest of `drafts/` and excluded from both builds and previews. Move articles into `content/life/` with metadata and full translations in `content/translations/{zh,en}/life/` when ready for a website preview; keep images in `public/life/`. Titles, quoted calendar dates and bodies are required; descriptions and covers are optional. Omitted `status` means `draft`; preview with `npm run dev:drafts` and set `published` after publication is approved. Each article has matching `/life/{slug}/` and `/en/life/{slug}/` pages.
 
 ## 日志 / Daily Log
 
 中文导航和页面标题为「日志」，英文为 **Daily Log**，地址分别为 `/daily-log/` 和 `/en/daily-log/`。日志按周一到周日自动分组，周与每日条目均按日期倒序，以文章列表展示日期、摘要和阅读全文入口。摘要优先使用 `description`，未填写时从正文自动提取。每页显示最近 8 个有记录的周；较早记录通过静态分页访问。点击条目进入当天的独立文章页，阅读完整正文，便于分享给 collaborator 或 mentor。
 
-每天的原始草稿先放在 `drafts/daily-log/YYYY-MM-DD.md`，可以直接写 Markdown，不必先补齐元数据或译文。这个目录不参与正式构建或草稿预览，并沿用 `drafts/` 的 Git 忽略规则。
+每天的原始草稿先放在 `drafts/daily-log/YYYY-MM-DD.md`，可以直接写 Markdown，不必先补齐元数据或译文。这个目录随 `drafts/` 纳入 Git 版本管理，不参与正式构建或草稿预览。
 
 准备在网站展示时，将当天记录移到 `content/daily-log/YYYY-MM-DD.md`，补齐元数据和对应译文。日期按北京时间填写，必须加引号并与文件名一致。默认按公开日志处理（省略 `status` 时视为 `published`）；标题、摘要和封面均不必填写。正文自由使用 Markdown，下面是内容结构示例，按当天实际工作填写：
 
@@ -198,7 +199,7 @@ status: "published"
 
 需要暂存时可以显式设为 `status: "draft"`，用 `npm run dev:drafts` 查看。正式构建不生成该条目的详情页，也不在列表或站点地图中收录；预览显示草稿标记并设置 `noindex`，预览版的 Daily Log 页面均不进入站点地图。`draft` 控制网站展示，不为公开 GitHub 仓库中的原稿提供隐私保护。
 
-Daily Log is a public research notebook with one Markdown file per working day. Start raw drafts in `drafts/daily-log/`, which is Git-ignored and excluded from both builds and previews. Move entries into `content/daily-log/` with metadata and translations when ready for the website. Entries are grouped into Monday–Sunday weeks, newest first, with eight active weeks per page. The article list shows dates and descriptions (or automatic body excerpts); each entry opens a shareable article page with the full text. Keep the complete Chinese and English editions together; titles, descriptions, and covers are optional. Omitted `status` means `published`; an explicit `draft` is only included in local draft previews. Add entries from actual work, and use the existing build/check and publication workflow.
+Daily Log is a public research notebook with one Markdown file per working day. Start raw drafts in `drafts/daily-log/`, which is versioned in Git with the rest of `drafts/` and excluded from both builds and previews. Move entries into `content/daily-log/` with metadata and translations when ready for the website. Entries are grouped into Monday–Sunday weeks, newest first, with eight active weeks per page. The article list shows dates and descriptions (or automatic body excerpts); each entry opens a shareable article page with the full text. Keep the complete Chinese and English editions together; titles, descriptions, and covers are optional. Omitted `status` means `published`; an explicit `draft` is only included in local draft previews. Add entries from actual work, and use the existing build/check and publication workflow.
 
 ## Thoughts
 

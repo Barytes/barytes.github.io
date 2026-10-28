@@ -1,0 +1,93 @@
+[
+  {
+    "id": "N101",
+    "project": "N1",
+    "title": "N1",
+    "author": "Roderick Dong（董科含）",
+    "source_date": "2026-06-17; updated 2026-07-29, public page metadata",
+    "access_date": "2026-10-27",
+    "url": "https://www.kehandong.com/new-blog/n1-group",
+    "type": "founder_program_description",
+    "read_status": "read_full_main_text_and_public_date_metadata",
+    "key_evidence": "Describes an under-22 builder/researcher community with real projects, shared life/work, introductions and resources. Selection emphasizes existing self-direction.",
+    "limitations": "Founder account; platform and newer School must be separated. Member achievements, scale and selectivity are self-reports, not measured training effects."
+  },
+  {
+    "id": "N102",
+    "project": "N1",
+    "title": "How to Identify Someone Worth Investing in at 20",
+    "author": "Roderick Dong（董科含）",
+    "source_date": "2026-01-13 UTC, public page metadata",
+    "access_date": "2026-10-27",
+    "url": "https://www.kehandong.com/new-blog/how-to-identify-someone-worth-investing-in-at-20",
+    "type": "founder_selection_essay",
+    "read_status": "read_full_main_text_and_public_date_metadata",
+    "key_evidence": "Selection heuristic values self-generated goals, action on curiosity and learning from mistakes; author describes a mistaken rejection.",
+    "limitations": "A theory of recognizing talent and personal judgment, not a tested intervention that produces those traits."
+  },
+  {
+    "id": "N103",
+    "project": "N1",
+    "title": "一群 AI Native 创始人，正在长出来",
+    "author": "N1；原载公众号董科含，虎嗅转载",
+    "source_date": "2026-07-04",
+    "access_date": "2026-10-27",
+    "url": "https://m.huxiu.com/article/4872563.html",
+    "type": "organizer_firsthand_session_account_syndicated",
+    "read_status": "read_full_main_text_with_AI_generated_sections_identified",
+    "key_evidence": "An evening session made participants' tools and workflows visible; a blind AI comparison used a shared prompt and anonymous voting.",
+    "limitations": "Single organizer narrative. Embedded model-generated essays are not N1 policy or research evidence; no complete week or controlled comparison."
+  },
+  {
+    "id": "N104",
+    "project": "N1",
+    "title": "客户做了什么，才算他真的需要你",
+    "author": "N1；原载公众号董科含，虎嗅转载",
+    "source_date": "2026-07-29",
+    "access_date": "2026-10-27",
+    "url": "https://www.huxiu.com/article/4879055.html?type=text",
+    "type": "organizer_firsthand_project_discussion_syndicated",
+    "read_status": "read_full_main_text",
+    "key_evidence": "An unnamed career-simulation project moves from letters of intent through customer objections and usage problems to a proposed smaller pilot.",
+    "limitations": "No named product, repository, sales validation or later pilot outcome. Described next actions are not completed results."
+  },
+  {
+    "id": "N105",
+    "project": "N1",
+    "title": "在模型持续进步的时代，年轻人真正应该押注什么",
+    "author": "N1；匿名研究者及创业者讨论整理",
+    "source_date": "2026-08-05",
+    "access_date": "2026-10-27",
+    "url": "https://www.huxiu.com/article/4880973.html?type=text",
+    "type": "organizer_compilation_of_expert_advice",
+    "read_status": "read_relevant_main_sections",
+    "key_evidence": "Advice stresses reliable baselines, ablations, implementation constraints, revisable beliefs and following work through failure and revision.",
+    "limitations": "Speakers are anonymous; advice is not a verified curriculum or evidence of participant learning. Technical forecasts not adopted as established facts."
+  },
+  {
+    "id": "N106",
+    "project": "N1",
+    "title": "不要只做一个观众：一个 AI 时代年轻创业者的自我校准",
+    "author": "懒羊羊 Eason；原载公众号董科含，虎嗅转载",
+    "source_date": "2026-05-05",
+    "access_date": "2026-10-27",
+    "url": "https://m.huxiu.com/article/4855706.html",
+    "type": "participant_first_person_reflection_syndicated",
+    "read_status": "read_full_main_text",
+    "key_evidence": "The author recalls motivation from N1 founder sharing and reflects on technical ownership, concrete collaboration and restless exploration.",
+    "limitations": "Experiences also involve Meta, Stanford contacts and other communities. Attribution to N1 alone is unsupported; personal recollections not independently verified."
+  },
+  {
+    "id": "N107",
+    "project": "N1",
+    "title": "N1 Angel Collective | Participation Memo",
+    "author": "Roderick Dong",
+    "source_date": "Page displays May 28; year unreliable because template metadata conflicts",
+    "access_date": "2026-10-27",
+    "url": "https://www.kehandong.com/blog/blog-post-title-three-y3peb-4lwnz-5pkhf-xlhzl",
+    "type": "founder_entity_description",
+    "read_status": "read_full_main_text_for_entity_disambiguation",
+    "key_evidence": "Describes an investor participation arrangement distinct from a learning program.",
+    "limitations": "Used only to distinguish N1AC from School; investment terms do not describe student participation."
+  }
+]

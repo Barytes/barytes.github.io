@@ -1,0 +1,32 @@
+[
+  {
+    "id": "N1L01",
+    "url": "https://n1ai.school/",
+    "status": "search identifies login; direct read 403",
+    "use": "No internal curriculum or member material obtained."
+  },
+  {
+    "id": "N1L02",
+    "url": "https://mp.weixin.qq.com/s/3AygHxTos2DTKJ0nv-LZ3w",
+    "status": "original application article located through a secondary newsletter; body inaccessible",
+    "use": "Do not use recruitment numbers or detailed commitments as verified implementation."
+  },
+  {
+    "id": "N1L03",
+    "url": "https://agent-me.cn/posts/3145ac27-a61d-48a9-8f1a-30a451e39714",
+    "status": "search-index excerpt; direct page only platform shell",
+    "use": "School recruitment lead; not counted as fully read primary evidence."
+  },
+  {
+    "id": "N1L04",
+    "url": "https://www.jfdaily.com/sgh/detail?id=4057270",
+    "status": "title, date 2026-09-15 and source 科创漕河泾 visible; image body failed",
+    "use": "Confirms a dated public recruitment report exists; no detailed program claims extracted."
+  },
+  {
+    "id": "N1L05",
+    "url": "https://mp.weixin.qq.com/s?__biz=MjM5Mzk1NzIwMw==&mid=2648826928&idx=1&sn=f6c682edf5a6ebe3bc66c385bc9454b0",
+    "status": "N104 original link extracted from public syndication; original body inaccessible",
+    "use": "N104 syndication read instead; original and syndication are one evidence unit."
+  }
+]

@@ -1,0 +1,11 @@
+{
+  "date": "2026-10-10",
+  "mode": "built-in imagegen",
+  "skill": "orange-line-illustration",
+  "source": "https://github.com/orange2ai/orange-line-illustration",
+  "editTarget": "public/blog/skill-development.png",
+  "palette": "A warm sand gray #D6CEBF",
+  "generatedSource": "/Users/beiyanliu/.codex/generated_images/01a12150-30a4-7802-b48a-0a9f93b7692d/exec-56fa30d0-1574-4aea-9552-adbc3e7f4002.png",
+  "final": "public/blog/skill-development.png",
+  "prompt": "Use case: precise-object-edit. Asset type: existing 21:9 ultra-wide editorial blog cover. Image 1 is the EDIT TARGET. Make ONLY two changes to this exact image: (1) REMOVE ALL TYPOGRAPHY from the upper-left and anywhere else, leaving that area empty; (2) replace the entire white background with one uniform flat muted warm sand gray, exact target color #D6CEBF. This background color must extend across every empty area and inside ALL unfilled outlines, including the multitool handle, blades, the figure's outline head and body, and the space between components, with no white islands or white objects. Preserve every original black hand-drawn line, the enormous open six-function pocket multitool on the lower left, all six separated tools on the lower right, the tiny figure actively working between them, the sparse baseline, the chest's single orange #F97316 dot, original scale and positions, all existing linework details, original framing and original 21:9 aspect ratio. Orange-line-illustration style: thin black hand-drawn editorial ink contours, tiny geometric circle-outline-headed figure with two black dot eyes and no mouth, enormous objects, quiet intelligent restraint, generous upper negative space. Do not add, rearrange or remove objects. NO text, titles, labels, captions, logos or watermarks anywhere. Flat solid background only, no gradient, no shading, no texture, no shadows, no white border. The user's no-text and muted warm background requirements override the source style's default title and white background. Output the edited full image."
+}
