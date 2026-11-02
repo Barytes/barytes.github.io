@@ -21,7 +21,7 @@ const sourcePosts = read('blog').filter(p => {
   const status = p.status ?? 'published';
   if (!['draft', 'published'].includes(status)) throw new Error(`Blog ${p.slug}: status must be draft or published`);
   return status === 'published' || previewDrafts;
-}).sort((a, b) => new Date(b.date) - new Date(a.date));
+}).sort((a, b) => new Date(b.date) - new Date(a.date) || a.slug.localeCompare(b.slug));
 const draftPostRoutes = new Set(sourcePosts.filter(p => p.status === 'draft').map(p => `/blog/${p.slug}/`));
 const sourceLifePosts = read('life').map(p => {
   const status = p.status ?? 'draft';
@@ -244,14 +244,15 @@ for (const { locale, posts, papers, threads, logs, lifePosts } of editions) {
     const paper = p.type === 'publications';
     const life = p.type === 'life';
     const route = `/${p.type}/${p.slug}/`;
-    const related = (paper ? papers : life ? lifePosts : posts).filter(x => x.slug !== p.slug);
+    const collection = paper ? papers : life ? lifePosts : posts;
+    const nextArticle = collection[collection.findIndex(x => x.slug === p.slug) + 1];
     const cover = paper ? '' : coverOf(p.slug, p.type);
     const coverHtml = cover ? `<figure class="article-cover"><img src="${url(cover)}" alt="${esc(p.title)}"></figure>` : '';
     const minutes = Math.max(1, Math.ceil((p.content.replace(/<[^>]*>/g, '').match(/[\u4e00-\u9fff]|[a-zA-Z]+/g) || []).length / 300));
     const metadata = paper
       ? `<p class="authors">${esc(p.authors)}</p><div class="publication-meta"><span>${esc(p.venue)}</span><span class="status ${p.status === 'Under review' ? 'muted' : ''}">${status(p)}</span></div><div class="paper-actions"><a class="button" href="${url(p.pdf)}" target="_blank" rel="noopener">${t.readPaper} ${arrow}</a>${p.doi ? `<a class="text-link" href="${esc(p.doi)}">${t.publishedVersion} ${arrow}</a>` : ''}</div>`
       : `<p class="article-meta">${date(p.date)} · ${minutes} ${t.minutes}${p.status === 'draft' ? ` · <span class="thread-draft">${t.draft}</span>` : ''}</p>`;
-    write(route, layout(p.title, paper ? 'publications' : life ? 'life' : 'blog', `<article class="article"><a class="back-link" href="${pageUrl(`/${p.type}/`)}">${paper ? t.allPapers : life ? t.allLifePosts : t.allNotes}</a><header class="article-header"><h1>${esc(p.title)}</h1>${metadata}</header>${coverHtml}<div class="prose">${markdown(p.content, locale)}</div>${related.length ? `<div class="article-end"><span>${t.continue}</span>${related.slice(0, 1).map(r => link(`/${r.type}/${r.slug}/`, `${esc(r.title)} ${arrow}`)).join('')}</div>` : ''}</article>`, route, p.description || (life ? t.lifeDescription : site.description[locale]), cover), locale);
+    write(route, layout(p.title, paper ? 'publications' : life ? 'life' : 'blog', `<article class="article"><a class="back-link" href="${pageUrl(`/${p.type}/`)}">${paper ? t.allPapers : life ? t.allLifePosts : t.allNotes}</a><header class="article-header"><h1>${esc(p.title)}</h1>${metadata}</header>${coverHtml}<div class="prose">${markdown(p.content, locale)}</div>${nextArticle ? `<div class="article-end"><span>${t.continue}</span>${link(`/${nextArticle.type}/${nextArticle.slug}/`, `${esc(nextArticle.title)} ${arrow}`)}</div>` : ''}</article>`, route, p.description || (life ? t.lifeDescription : site.description[locale]), cover), locale);
   }
   const deskScene = `<div class="life-desk-scene" data-desk-scene data-embedded role="group" tabindex="0" aria-label="${esc(t.deskSceneLabel)}"></div><script type="module" src="${assetUrl('/desk-scene/scene.js')}"></script>`;
   const lifeList = lifePosts.map(p => `<a class="life-post" href="${pageUrl(`/life/${p.slug}/`)}"><div><div class="meta"><time datetime="${esc(p.date)}">${date(p.date)}</time>${p.status === 'draft' ? `<span class="thread-draft">${t.draft}</span>` : ''}</div><h2>${esc(p.title)}</h2>${p.description ? `<p>${esc(p.description)}</p>` : ''}</div><span class="row-arrow" aria-hidden="true">↗</span></a>`).join('');

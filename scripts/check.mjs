@@ -26,6 +26,19 @@ for (const route of [...draftPostRoutes, ...draftLifeRoutes, ...draftLogRoutes])
     if (previewDrafts && fs.existsSync(target) && !fs.readFileSync(target, 'utf8').includes('class="thread-draft"')) failures.push(`${target}: missing draft label`);
   }
 }
+// Follow the rendered reading chain and require every listed article exactly once.
+for (const prefix of ['', '/en']) {
+  for (const type of ['blog', 'life']) {
+    const listing = fs.readFileSync(path.join(root, prefix, type, 'index.html'), 'utf8');
+    const cardClass = type === 'blog' ? 'post-card' : 'life-post';
+    const routes = [...listing.matchAll(new RegExp(`<a class="${cardClass}" href="([^"]+)"`, 'g'))].map(m => m[1]);
+    for (const [index, route] of routes.entries()) {
+      const article = fs.readFileSync(path.join(root, route.slice(base.length), 'index.html'), 'utf8');
+      const continuation = article.match(/<div class="article-end">[\s\S]*?<a[^>]*href="([^"]+)"/)?.[1];
+      if (continuation !== routes[index + 1]) failures.push(`${route}: continue-reading must point to the adjacent older article, or end at the oldest`);
+    }
+  }
+}
 function walk(dir) {
   for (const f of fs.readdirSync(dir)) {
     const file = path.join(dir, f);
